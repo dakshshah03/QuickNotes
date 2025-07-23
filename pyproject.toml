@@ -1,0 +1,11 @@
+[project]
+name = "quicknotes"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain>=0.3.26",
+    "pymupdf4llm>=0.0.27",
+    "tiktoken>=0.9.0",
+]
