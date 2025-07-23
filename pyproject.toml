@@ -5,7 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "chromadb>=1.0.15",
+    "fastapi>=0.116.1",
     "langchain>=0.3.26",
+    "langchain-huggingface>=0.3.1",
     "pymupdf4llm>=0.0.27",
+    "sentence-transformers>=5.0.0",
     "tiktoken>=0.9.0",
 ]
