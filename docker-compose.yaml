@@ -1,0 +1,16 @@
+version: '3.8'
+
+# postgres database
+services:
+  db:
+    image: postgres:16-alpine3.19
+    container_name: QuickNotesPostgreSQL
+    restart: always
+    environment:
+      POSTGRES_DB: your_database_name
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PW}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data 
