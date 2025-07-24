@@ -1,11 +1,12 @@
 from sentence_transformers import SentenceTransformer
 from langchain_core.documents import Document
-from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 
 import pymupdf4llm
 from langchain.text_splitter import MarkdownTextSplitter, RecursiveCharacterTextSplitter
 from uuid import uuid4
+
+#TODO: Switch to pgvector from chromadb
 
 class StatelessVectorDatabase:
     def __init__(self):

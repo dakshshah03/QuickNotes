@@ -7,7 +7,7 @@ services:
     container_name: QuickNotesPostgreSQL
     restart: always
     environment:
-      POSTGRES_DB: your_database_name
+      POSTGRES_DB: notebookDB
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PW}
     ports:
