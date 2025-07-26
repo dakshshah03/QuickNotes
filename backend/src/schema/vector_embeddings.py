@@ -1,0 +1,1 @@
+# TODO: implement schema for both document metadata and chat embeddings
