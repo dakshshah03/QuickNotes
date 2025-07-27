@@ -1,7 +1,7 @@
 from sentence_transformers import SentenceTransformer
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
-
+from langchain_postgres import 
 import pymupdf4llm
 from langchain.text_splitter import MarkdownTextSplitter, RecursiveCharacterTextSplitter
 from uuid import uuid4
