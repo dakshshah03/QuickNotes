@@ -1,8 +1,8 @@
 import React, { useState, type FormEvent, type JSX } from 'react';
 
 interface LoginErrorResponse {
-  message: string; // The error message from your API
-  statusCode?: number; // Optional HTTP status code from your API
+  message: string; 
+  statusCode?: number; 
 }
 
 interface LoginSuccessResponse {
@@ -18,6 +18,7 @@ interface LoginSuccessResponse {
 
 // TODO: account creation form 
 // TODO: password reset form
+// TODO: correct api endpoint
 
 function LoginForm(): JSX.Element {
     const [userName, setUserName] = useState<string>('');
@@ -95,6 +96,6 @@ function LoginForm(): JSX.Element {
             {message && <p>{message}</p>}
         </div>
     );
-}
+};
 
 export default LoginForm
