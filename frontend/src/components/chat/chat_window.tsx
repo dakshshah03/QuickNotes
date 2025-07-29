@@ -1,6 +1,6 @@
 import React, { type FormEvent } from 'react';
 import { useState, useEffect } from 'react';
-
+import './chat_page.css';
 interface MessageSendResponse {
     llmResponse: string;
 }
@@ -145,16 +145,17 @@ const ChatWindow = () => {
 
     return (
         <div className="chat-window">
-            <div className="message-list" style={{ overflowY: 'scroll', maxHeight: '400px', border: '1px solid #ccc', padding: '10px' }}>
+            <div className="message-box">
                 {
                     messages.map((msg) => (
                     <div key={msg.messageId} className={`message ${msg.sender}-message`}>
-                    <strong>{msg.sender}:</strong> {msg.content}
+                    {msg.content}
                 </div>
                 ))}
             </div>
-            <div style={{ marginTop: '10px' }}>
-                <input
+            <div className="chat-box">
+                <input 
+                    className="chat-input-box"
                     type="text"
                     placeholder="Type your message..."
                     onKeyDown={(e) => {
@@ -163,19 +164,14 @@ const ChatWindow = () => {
                             e.currentTarget.value = ''; // Clear input
                         }
                     }}
-                    style={{ width: 'calc(100% - 70px)', padding: '8px' }}
                 />
-                <button onClick={() => {
-                    // You'd get the value from a useState in a real SendMessageBox
-                    // For this example, let's assume you have an input ref or state
+                <button id="send-message" onClick={() => {
                     const inputElement = document.querySelector('input');
                     if (inputElement) {
                         handleSendMessage(sendMessageEndpoint, inputElement.value);
                         inputElement.value = ''; // Clear input
                     }
-                }} style={{ padding: '8px 12px', marginLeft: '5px' }}>Send</button>
-            
-
+                }}>Send</button>
             </div>
         </div>
     );
