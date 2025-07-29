@@ -1,5 +1,5 @@
 import React, { type FormEvent } from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './chat_page.css';
 interface MessageSendResponse {
     llmResponse: string;
@@ -33,16 +33,21 @@ interface messageHistoryFetchResponse {
 const ChatWindow = () => {
 
     const apiEndpoint = 'http://127.0.0.1:8000/api/';
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const chatBoxRef = useRef<HTMLDivElement>(null);
+
     const [responseMessage, setResponseMessage] = useState<string>('');
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState(null);
     
     const [messageContent, setMessageContent] = useState<string>('');
+    const [inputValue, setInputValue] = useState<string>('');
     const [nextMessageId, setNextMessageId] = useState<number>(0);
 
     const messageHistoryEndpoint = apiEndpoint + 'chat/history';
     const sendMessageEndpoint = apiEndpoint + 'chat/sendmessage';
+    const uploadPDFEndpoint = apiEndpoint + 'chat/pdf';
     
     const fetchMessageHistory = async (apiEndpoint: string) => {
         setLoading(true);
@@ -131,10 +136,39 @@ const ChatWindow = () => {
     };
 
 
+    const handleUploadDocument = async (event: FormEvent, apiEndpoint: string) => {
+        event.preventDefault();
+        const pdfData = new FormData();
+        
+        try {
+            const response = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: pdfData,
+            });
+        } catch (error) {
+            
+        } finally {
+
+        }
+    };
+
     useEffect(() => {
         fetchMessageHistory(messageHistoryEndpoint);
     }, []);
+
+    useEffect(() => {
+      if (chatBoxRef.current) {
+        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+      }
+    },[messages.length]);
     
+    const handleButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
     if (loading) {
         return <div>Loading Messages...</div>;
     } 
@@ -144,34 +178,47 @@ const ChatWindow = () => {
     }
 
     return (
-        <div className="chat-window">
-            <div className="message-box">
-                {
-                    messages.map((msg) => (
-                    <div key={msg.messageId} className={`message ${msg.sender}-message`}>
-                    {msg.content}
+        <div className="notebook-window">
+            <div id='notebook-components'>
+                <div id='file-upload'>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        accept=".pdf" // Only accept PDF files
+                        onChange={(e) => handleUploadDocument(e as unknown as FormEvent, uploadPDFEndpoint)}
+                        className="hidden" // Keep the input hidden
+                    />
+                    <button onClick={handleButtonClick}>Upload PDF</button>
                 </div>
-                ))}
             </div>
-            <div className="chat-box">
-                <input 
-                    className="chat-input-box"
-                    type="text"
-                    placeholder="Type your message..."
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            handleSendMessage(sendMessageEndpoint, e.currentTarget.value);
-                            e.currentTarget.value = ''; // Clear input
-                        }
-                    }}
-                />
-                <button id="send-message" onClick={() => {
-                    const inputElement = document.querySelector('input');
-                    if (inputElement) {
-                        handleSendMessage(sendMessageEndpoint, inputElement.value);
-                        inputElement.value = ''; // Clear input
-                    }
-                }}>Send</button>
+            <div id='chat-components'>
+                <div className="message-box" ref={chatBoxRef}>
+                    {
+                        messages.map((msg) => (
+                        <div key={msg.messageId} className={`message ${msg.sender}-message`}>
+                        {msg.content}
+                    </div>
+                    ))}
+                </div>
+                <div className="chat-box">
+                    <input 
+                        className='chat-input-box'
+                        type="text"
+                        value={inputValue}
+                        placeholder="Type your message..."
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleSendMessage(sendMessageEndpoint, inputValue);
+                                setInputValue(''); // Clear input
+                            }
+                        }}
+                    />
+                    <button id="send-message" onClick={() => {
+                        handleSendMessage(sendMessageEndpoint, inputValue);
+                        setInputValue('');
+                    }}>Send</button>
+                </div>
             </div>
         </div>
     );
