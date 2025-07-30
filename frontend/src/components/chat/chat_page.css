@@ -10,8 +10,9 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    min-width: 280px;
-    max-width: 350px;
+    /* min-width: 280px;
+    max-width: 350px; */
+    width: 20%;
     position: relative;
 }
 
@@ -35,38 +36,6 @@
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-/* 
-#file-upload input[type="file"] {
-    width: 100%;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#file-upload input[type="file"]:hover {
-    border-color: rgba(255, 255, 255, 0.8);
-    background: rgba(255, 255, 255, 0.2);
-}
-
-#file-upload input[type="file"]::file-selector-button {
-    background: rgb(48, 48, 47);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-right: 10px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-#file-upload input[type="file"]::file-selector-button:hover {
-    background: rgb(202, 202, 197);
-    transform: scale(1.05);
-} */
 
 .message-box {
     overflow-y: auto;
@@ -74,6 +43,7 @@
     /* border: 1px solid #ccc; */
     padding: 10px;
     border-radius: 20px;
+    width: 90%;
 }
 
 .llm-message {

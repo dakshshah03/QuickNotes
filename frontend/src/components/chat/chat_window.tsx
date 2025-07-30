@@ -45,6 +45,8 @@ const ChatWindow = () => {
     const [inputValue, setInputValue] = useState<string>('');
     const [nextMessageId, setNextMessageId] = useState<number>(0);
 
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
     const messageHistoryEndpoint = apiEndpoint + 'chat/history';
     const sendMessageEndpoint = apiEndpoint + 'chat/sendmessage';
     const uploadPDFEndpoint = apiEndpoint + 'chat/pdf';
@@ -136,16 +138,13 @@ const ChatWindow = () => {
     };
 
 
-    const handleUploadDocument = async (event: FormEvent, apiEndpoint: string) => {
-        event.preventDefault();
+    const handleUploadDocument = async (file: File, apiEndpoint: string) => {
         const pdfData = new FormData();
-        
+        pdfData.append('file', file);
+
         try {
             const response = await fetch(apiEndpoint, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
                 body: pdfData,
             });
         } catch (error) {
@@ -163,7 +162,21 @@ const ChatWindow = () => {
       if (chatBoxRef.current) {
         chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
       }
-    },[messages.length]);
+    }, [messages.length]);
+
+    useEffect(() => {
+        if (selectedFile) {
+            handleUploadDocument(selectedFile, uploadPDFEndpoint);
+        }
+    }, [selectedFile, uploadPDFEndpoint]);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            setSelectedFile(event.target.files[0]);
+        } else {
+            setSelectedFile(null);
+        }
+    };
     
     const handleButtonClick = () => {
         fileInputRef.current?.click();
@@ -180,16 +193,19 @@ const ChatWindow = () => {
     return (
         <div className="notebook-window">
             <div id='notebook-components'>
-                <div id='file-upload'>
+                <form id='file-upload'>
                     <input
                         type="file"
                         ref={fileInputRef}
-                        accept=".pdf" // Only accept PDF files
-                        onChange={(e) => handleUploadDocument(e as unknown as FormEvent, uploadPDFEndpoint)}
+                        accept="application/pdf"
+                        onChange={handleFileChange}
                         className="hidden" // Keep the input hidden
                     />
-                    <button onClick={handleButtonClick}>Upload PDF</button>
-                </div>
+                    <button 
+                        type="button"
+                        onClick={handleButtonClick}
+                    >Upload PDF</button>
+                </form>
             </div>
             <div id='chat-components'>
                 <div className="message-box" ref={chatBoxRef}>
