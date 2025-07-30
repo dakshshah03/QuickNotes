@@ -1,3 +1,4 @@
 *.env
 *secrets.conf
 *.pdf
+__pycache__

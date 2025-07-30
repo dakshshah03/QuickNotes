@@ -1,9 +1,8 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File
-from fastapi import Request
+from fastapi import HTTPException, UploadFile, File
+from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 import shutil
 import os
-from fastapi import APIRouter
 from chat import DocumentCreate
 from pydantic import SecretStr, UUID4
 
