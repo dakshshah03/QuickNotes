@@ -1,0 +1,1 @@
+from schema.documents import DocumentCreate

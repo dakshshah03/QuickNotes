@@ -1,26 +1,24 @@
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone 
-from uuid import UUID, uuid4
+from uuid import uuid4
+from pydantic import BaseModel, Field, SecretStr, UUID4
 
 class DocumentCreate(BaseModel):
-    document_name: str = Field(
+    jwt: SecretStr = Field(
         ...,
-        min_length=1,
-        max_length=255,
-        description="The name of the document. Must be between 1 and 255 characters."
+        title="JSON Web Token",
+        description="JWT for authentication"
     )
     
-    document_text: str
+    parent_notebook: UUID4 = Field(
+        ...,
+        decription="ID for parent notebook. Obtained from local state"
+    )
 
 class DocumentDB(DocumentCreate):
-    document_id: UUID = Field(
+    document_id: UUID4 = Field(
         default_factory=uuid4,
         description="Unique ID for document, primary key"
-    )
-    
-    parent_notebook: UUID = Field(
-        ...,
-        decription="ID for parent notebook"
     )
     
     document_active: bool = Field(

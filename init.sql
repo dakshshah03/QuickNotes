@@ -21,6 +21,13 @@ CREATE TABLE IF NOT EXISTS notebooks (
     updated_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- chat (every notebook can have multiple)
+CREATE TABLE IF NOT EXISTS chats (
+    chat_id UUID PRIMARY KEY,
+    parent_notebook UUID NOT NULL,
+    chat_name VARCHAR(30) NOT NULL,
+)
+
 -- document table (list of pdfs, file locations, )
 CREATE TABLE IF NOT EXISTS documents (
     document_id UUID PRIMARY KEY,
@@ -52,16 +59,25 @@ ALTER TABLE notebooks
 ADD CONSTRAINT FK_notebook_owner
 FOREIGN KEY (notebook_owner) REFERENCES users(user_id)
 ON DELETE CASCADE;
--- index for notebook owner lookups
-CREATE INDEX IF NOT EXISTS idx_notebook_owner ON notebooks (notebook_owner);
+
+-- connects chats to notebook table
+ALTER TABLE chats
+ADD CONSTRAINT FK_parent_notebook
+FOREIGN KEY (parent_notebook) REFERENCES notebooks(notebook_id)
+ON DELETE CASCADE;
 
 -- connects documents to notebook table
 ALTER TABLE documents
 ADD CONSTRAINT FK_parent_notebook
 FOREIGN KEY (parent_notebook) REFERENCES notebooks(notebook_id)
 ON DELETE CASCADE;
+
+
+-- index for notebook owner lookups
+CREATE INDEX IF NOT EXISTS idx_notebook_owner ON notebooks (notebook_owner);
 -- index for lookups to parent notebook for a given document
-CREATE INDEX IF NOT EXISTS idx_parent_notebook ON notebooks (parent_notebook);
+CREATE INDEX IF NOT EXISTS idx_parent_notebook ON chats (parent_notebook);
+CREATE INDEX IF NOT EXISTS idx_parent_notebook ON documents (parent_notebook);
 
 CREATE INDEX IF NOT EXISTS document_embeddings_hnsw_idx ON document_embeddings USING HNSW (embedding vector_cosine_ops);
 
