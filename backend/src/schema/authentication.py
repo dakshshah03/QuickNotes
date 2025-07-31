@@ -2,10 +2,6 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, SecretStr
 from datetime import datetime, timedelta
 from uuid import UUID
 
-class UserLoginPayload(BaseModel):
-    email: EmailStr
-    password: SecretStr
-    
 class JWTPayload(BaseModel):
     user_id: str
     exp: datetime = Field(

@@ -1,12 +1,10 @@
-import os
-from database import Database
 import psycopg
 from pydantic import EmailStr
 from utils.exceptions import UserNotFoundError
 
 def fetch_pw_hash(conn: psycopg.Connection, email: EmailStr):
     """
-    Given a connection and user id, fetches password hash
+    Fetches password hash
 
     Args:
         conn (psycopg.Connection): connection to database to make the query
