@@ -14,3 +14,24 @@ CREATE TABLE IF NOT EXISTS notebooks (
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Begin transaction to ensure atomicity
+BEGIN;
+
+-- Insert temporary test data
+INSERT INTO users (user_id, email, name, password_hash) VALUES 
+    ('550e8400-e29b-41d4-a716-446655440000', 'temp.user@example.com', 'Temp User', '$argon2id$v=19$m=32768,t=3,p=2$g9lbJ7eBB3tANU3atxlvdA$zLpl2varquUJ/Iim1cIwY6jtaAioMZMlWBE+SvBS6t4');
+
+INSERT INTO notebooks (notebook_id, notebook_owner, notebook_name, pdf_storage_dir) VALUES 
+    ('550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440000', 'Temp Notebook', '/tmp/notebooks/temp_notebook');
+
+-- Commit the transaction
+COMMIT;
+
+-- Verify the data was inserted
+SELECT 'Users inserted:' as info, COUNT(*) as count FROM users;
+SELECT 'Notebooks inserted:' as info, COUNT(*) as count FROM notebooks;
+SELECT * FROM users;
+SELECT * FROM notebooks;
+
+

@@ -1,4 +1,4 @@
-from core import Settings
+from core.config import Settings
 import psycopg
 from psycopg_pool import ConnectionPool
 

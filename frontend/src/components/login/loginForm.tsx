@@ -6,14 +6,10 @@ interface LoginErrorResponse {
 }
 
 interface LoginSuccessResponse {
-  user: {
-    id: string;
-    email: string;
-    username: string;
-    name: string;
-  };
-  token: string; 
-  message?: string; 
+  access_token: string;
+  token_type: string;
+  user_id: string;
+  email: string;
 }
 
 // TODO: account creation form 
@@ -33,17 +29,21 @@ function LoginForm(): JSX.Element {
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/login', { 
+            const formData = new FormData();
+            formData.append('username', userName);
+            formData.append('password', password);
+
+            const response = await fetch('http://127.0.0.1:8000/auth/token', { 
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userName, password }),
+                body: formData,
             });
 
             if (response.ok) {
                 const data: LoginSuccessResponse = await response.json();
-                setMessage("Login Success for " + data.user.username);
+                setMessage("Login Success for " + data.email);
+                // Store token for future requests
+                localStorage.setItem('access_token', data.access_token);
+                localStorage.setItem('user_id', data.user_id);
                 console.log("Login Successful:", data);
             } else {
                 const errorData: LoginErrorResponse = await response.json();

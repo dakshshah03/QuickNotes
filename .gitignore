@@ -2,3 +2,4 @@
 *secrets.conf
 *.pdf
 __pycache__
+/pgdata/

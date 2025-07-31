@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import ChatWindow from './components/chat/chat_window';
+import LoginForm from './components/login/loginForm';
 
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
 
   return (
     <div className="App">
-      <ChatWindow/>
+      <LoginForm/>
     </div>
   );
 }

@@ -6,7 +6,7 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.vector_stores.postgres import PGVectorStore
 
 import psycopg
-from dotenv import load_dotenv
+from dotenv.main import load_dotenv
 import os
 from typing import Dict
 
@@ -20,6 +20,7 @@ load_dotenv()
 class DocumentVectorDB:
     def __init__(self):
         Settings.embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2") 
+        Settings.llm = None
         self.vector_store = PGVectorStore.from_params(
             database=os.environ["POSTGRES_DB_NAME"],
             host=os.environ["POSTGRES_HOST"],
@@ -27,7 +28,7 @@ class DocumentVectorDB:
             user=os.environ["POSTGRES_USER"],
             password=os.environ["POSTGRES_PW"],
             table_name="document_embeddings",
-            embed_dim=Settings.embed_model.embed_size
+            embed_dim=384
         )
         
         self.index = VectorStoreIndex.from_vector_store(vector_store=self.vector_store)

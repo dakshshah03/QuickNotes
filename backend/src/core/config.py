@@ -1,5 +1,5 @@
 from argon2 import PasswordHasher
-from dotenv import load_dotenv
+from dotenv.main import load_dotenv
 import os
 
 load_dotenv()

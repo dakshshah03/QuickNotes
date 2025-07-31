@@ -1,2 +1,2 @@
-from schema.documents import DocumentCreate
-import messages, pdf
+# from schema.documents import DocumentCreate
+# import messages, pdf

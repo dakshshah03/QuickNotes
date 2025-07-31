@@ -3,7 +3,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 import shutil
 import os
-from chat import DocumentCreate
+from schema.documents import DocumentCreate
 from pydantic import SecretStr, UUID4
 
 router = APIRouter(prefix="/pdf", tags=["Chat PDF"])

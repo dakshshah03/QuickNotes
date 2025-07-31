@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone 
-from uuid import uuid4
+from uuid import uuid4, UUID
 from pydantic import BaseModel, Field, SecretStr, UUID4
 
 class DocumentCreate(BaseModel):
@@ -16,7 +16,7 @@ class DocumentCreate(BaseModel):
     )
 
 class DocumentDB(DocumentCreate):
-    document_id: UUID4 = Field(
+    document_id: UUID = Field(
         default_factory=uuid4,
         description="Unique ID for document, primary key"
     )

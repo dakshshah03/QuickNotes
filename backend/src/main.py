@@ -10,9 +10,11 @@ from typing import Annotated
 from database.db import db_instance
 from components.rag.pdf_parser import parse_document
 from components.rag.vector_store import DocumentVectorDB
+from core.config import Settings
 
 # router imports
 from routers.chat import messages, pdf
+from routers.authentication import login
 
 
 
@@ -25,7 +27,8 @@ async def lifespan(app: FastAPI):
     finally:
         print("Application Shutdown: Closing database connection pool...")
         db_instance.close()
-        
+
+# print(Settings.password_hasher.hash("TestPW"))
 
 app = FastAPI(lifespan=lifespan)
 
@@ -48,5 +51,6 @@ app.add_middleware(
 )
 
 app.include_router(pdf.router)
+app.include_router(login.router)
 
 
