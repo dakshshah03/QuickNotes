@@ -1,17 +1,33 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, UploadFile, File
 from fastapi import HTTPException, Depends
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from contextlib import asynccontextmanager
+from typing import Annotated
 
 # local imports
+from database.db import db_instance
 from components.rag.pdf_parser import parse_document
 from components.rag.vector_store import DocumentVectorDB
 
 # router imports
 from routers.chat import messages, pdf
 
-app = FastAPI()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Starting Application: Initializing database connection pool...")
+    try:
+        db_instance.connect(min_conn=1, max_conn=10)
+        yield
+    finally:
+        print("Application Shutdown: Closing database connection pool...")
+        db_instance.close()
+        
+
+app = FastAPI(lifespan=lifespan)
 
 vector_db_instance = DocumentVectorDB()
 
@@ -32,3 +48,5 @@ app.add_middleware(
 )
 
 app.include_router(pdf.router)
+
+
