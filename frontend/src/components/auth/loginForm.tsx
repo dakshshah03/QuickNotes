@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, type FormEvent, type JSX } from 'react';
+import React, { useState, type FormEvent} from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '@/api/login';
 
@@ -26,6 +26,7 @@ function LoginForm() {
             setIsLoading,
             setMessage
         );
+        // TODO: do something with the result
     }
 
     return (

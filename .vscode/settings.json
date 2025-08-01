@@ -1,4 +1,4 @@
 {
-    "python.defaultInterpreterPath": ".venv/bin/python",
+    "python.defaultInterpreterPath": "./backend/.venv/bin/python",
     "python.languageServer": "Pylance",
 }
