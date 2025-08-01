@@ -63,14 +63,38 @@ function LoginForm(): JSX.Element {
     };
 
     return (
-        <div>
-            <h2> Login </h2>
+        <div 
+            className={`
+            rounded-[20px]
+            bg-linear-to-t from-[#015a70] to-[#53003f]
+            h-[500px]
+            w-[400px]
+        `}>
+            <h2 className={`
+                text-4xl
+                p-[30px]
+                mt-[40px]
+            `}> Sign In</h2>
+
+            <div className="mb-[100px]"></div> 
+
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input 
+                <div className="grid pl-6 pr-6 mb-3">
+                    <label htmlFor="email" className={`
+                        block
+                        text-left
+                        mb-2
+                    `}>Email:</label>
+                    <input
+                        className={`
+                            rounded-[5px]
+                            outline-1
+                            pl-[10px]
+                            outline-[#000000]
+                            bg-[#c7c7c7]
+                            text-[#000000]
+                        `}
                         type="username"
-                        id="username"
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
                         required
@@ -78,9 +102,21 @@ function LoginForm(): JSX.Element {
                     />
                 </div>
                 
-                <div>
-                    <label htmlFor="password">Password:</label>
+                <div className="grid pl-6 pr-6">
+                    <label htmlFor="password" className={`
+                        block
+                        text-left
+                        mb-2
+                    `}>Password:</label>
                     <input
+                        className={`
+                            rounded-[5px]
+                            outline-1
+                            pl-[10px]
+                            outline-[#000000]
+                            bg-[#c7c7c7]
+                            text-[#000000]
+                        `}
                         type="password"
                         id="password"
                         value={password}
@@ -89,9 +125,16 @@ function LoginForm(): JSX.Element {
                         disabled={isLoading} 
                     />
                 </div>
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Logging In...' : 'Login'}
-                </button>
+
+                <div className="grid pl-6 pr-6 mt-4 pt-[80px]">
+                    <button type="submit" disabled={isLoading} className={`
+                            rounded-[5px]
+                            outline-1
+                            p-2
+                        `}>
+                        {isLoading ? 'Logging In...' : 'Login'}
+                    </button>
+                </div>
             </form>
             {message && <p>{message}</p>}
         </div>

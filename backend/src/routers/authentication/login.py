@@ -33,10 +33,8 @@ async def login_for_access_token(
     
     jwt_payload = JWTPayload(user_id=user_id)
     jwt_claim = jwt_payload.model_dump(mode='json')
-    print("XXXXXXXXXX")
     
     encoded_jwt = jwt.encode(jwt_claim, Settings.jwt_secret_key, Settings.jwt_algorithm)
-    print("XXXXXXXXXX")
 
     return {
         "access_token": encoded_jwt,

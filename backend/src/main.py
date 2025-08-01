@@ -16,8 +16,6 @@ from core.config import Settings
 from routers.chat import messages, pdf
 from routers.authentication import login
 
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Starting Application: Initializing database connection pool...")

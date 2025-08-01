@@ -1,0 +1,21 @@
+#login-form {
+    color: rgb(255, 255, 255);
+    padding: 10px;
+}
+
+#login-box {
+    background-color: rgb(62, 74, 87);
+    width: 300px;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.login-item {
+    margin-bottom: 20px;
+}
+
+.input-box {
+    background-color: rgb(100, 105, 104);
+    height: 30px;
+    border-radius: 15px;
+}
