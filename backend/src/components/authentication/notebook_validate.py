@@ -5,6 +5,8 @@ def validate_notebook(parentUser: UUID, userID: UUID):
     Validate that the a notebook is owned by
     a given userID
     """
+    
+    
     pass
 
 def validate_chat(parentNotebook: UUID, userID: UUID):

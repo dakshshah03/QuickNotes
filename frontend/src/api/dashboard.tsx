@@ -2,8 +2,12 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 
 import { getAccessToken } from '@/utils/accessToken';
 
+interface notebook {
+
+}
+
 interface LoadNotebookDashboardSuccessResponse {
-    notebooks: any[]; // Define proper notebook type
+    notebooks: notebook[]; // Define proper notebook type
 }
 
 export const loadNotebookList = async (
@@ -24,9 +28,16 @@ export const loadNotebookList = async (
         
         // Access token is expired or doesnt exist, redirect to login
         if (response.status === 401) {
-            router.push('/login');
+            router.push('/auth/login');
             return;
         }
+
+        // TODO: handle this in caller? 
+        // if (response.status === 403) {
+        //     setMessage(`Access Forbidden: ${response.status} Forbidden`);
+        //     return;
+        // }
+        console.log("Dashboard Loaded");
 
         if (!response.ok) {
             throw new Error(`HTTP error: ${response.status}`);

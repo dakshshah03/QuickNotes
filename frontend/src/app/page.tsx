@@ -1,11 +1,11 @@
 import Image from "next/image";
-import LoginForm from '../components/auth/loginForm';
+import LoginForm from './auth/login/page';
 
 export default function Home() {
   return (
     <div className="App" >
       <div>
-        <LoginForm/>
+        {/* <LoginForm/> */}
       </div>
     </div>
   );

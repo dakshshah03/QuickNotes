@@ -7,7 +7,7 @@ from utils.dependencies import DBCxn
 from core.config import Settings
 from schema.authentication import JWTPayload
 from database.dashboard import notebooks
-from components.authentication.jwt import verifyJWT
+from backend.src.components.authentication.access_token import verifyJWT
 
 # TODO: handle clicking notebook (loads notebook)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
