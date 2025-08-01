@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState, type FormEvent, type JSX } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface LoginErrorResponse {
   message: string; 
@@ -21,6 +24,7 @@ function LoginForm(): JSX.Element {
     const [password, setPassword] = useState<string>('');
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const router = useRouter();
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
@@ -41,10 +45,17 @@ function LoginForm(): JSX.Element {
             if (response.ok) {
                 const data: LoginSuccessResponse = await response.json();
                 setMessage("Login Success for " + data.email);
-                // Store token for future requests
-                localStorage.setItem('access_token', data.access_token);
-                localStorage.setItem('user_id', data.user_id);
+                
+                // Store token for future requests (client-side only)
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('user_id', data.user_id);
+                }
+                
                 console.log("Login Successful:", data);
+                
+                // Redirect to dashboard or home page
+                router.push('/dashboard');
             } else {
                 const errorData: LoginErrorResponse = await response.json();
                 setMessage("Login failed: " + (errorData.message || "Invalid credentials"));
@@ -93,6 +104,7 @@ function LoginForm(): JSX.Element {
                             outline-[#000000]
                             bg-[#c7c7c7]
                             text-[#000000]
+                            hover:outline-3
                         `}
                         type="username"
                         value={userName}
@@ -116,6 +128,7 @@ function LoginForm(): JSX.Element {
                             outline-[#000000]
                             bg-[#c7c7c7]
                             text-[#000000]
+                            hover:outline-3
                         `}
                         type="password"
                         id="password"
@@ -131,6 +144,7 @@ function LoginForm(): JSX.Element {
                             rounded-[5px]
                             outline-1
                             p-2
+                            hover:outline-5
                         `}>
                         {isLoading ? 'Logging In...' : 'Login'}
                     </button>
