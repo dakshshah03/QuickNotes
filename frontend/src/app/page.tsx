@@ -1,7 +1,7 @@
 import Image from "next/image";
 import LoginForm from './auth/login/page';
 import NotebookBlock from "@/components/notebookBlock";
-import ChatTile from "@/components/chat";
+import ChatTile from "@/components/chat/chatTile";
 
 export default function Home() {
   return (

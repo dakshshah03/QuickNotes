@@ -4,7 +4,7 @@
 // collapsible
 import React from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import ChatTile from './chat';
+import ChatTile from './chat/chatTile';
 // create map that creates chat tiles
 // create wrapper div that has new chat button, expands on hover, and toggle expand buttons
 
@@ -18,22 +18,22 @@ const NotebookSidebar = ({ chatList, notebookId, router } : {chatList: chatItem[
     
     return (
         <div className="
-            w-[250px]
-            bg-[#3c7280]
-        ">
+                overflow-y-auto
+                h-full
+                max-h-screen
+            ">
             <div>
 
             </div>
-                {
-                    chatList.map((cl) => (
-                        <button
-                            key={cl.chatId}
-                            onClick={() => router.push(`/notebooks/${notebookId}/${cl.chatId}`)}
-                        >
-                            <ChatTile chatName={cl.chatName}></ChatTile>
-                        </button>
-                    ))
-                }
+            {chatList.map((cl) => (
+                <button 
+                    className='grid min-w-full pr-[20px] pl-[20px]'
+                    key={cl.chatId}
+                    onClick={() => router.push(`/notebooks/${notebookId}/${cl.chatId}`)}
+                >
+                    <ChatTile chatName={cl.chatName}></ChatTile>
+                </button>
+            ))}
         
         </div>
     )

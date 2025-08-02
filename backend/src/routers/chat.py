@@ -9,13 +9,14 @@ from schema.authentication import JWTPayload
 from database.dashboard import notebooks
 from components.authentication.access_token import verifyJWT
 
-# TODO: handle clicking notebook (loads notebook)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
-router = APIRouter(prefix="/notebooks", tags=["authentication login"])
+router = APIRouter(prefix="/chat", tags=["authentication login"])
 
-# load blank chat (loads current notebook after authenticating JWT)
-# should return chat list and nothing else
-@router.get("/{notebookId}")
+# load specific chat (return chat history)
+@router.get("/{chatId}/history")
 
-# # returns 
-# @router.get("")
+
+
+# send message, return LLM response
+# frontend will append this to list
+@router.put("/{chatId}/send")
