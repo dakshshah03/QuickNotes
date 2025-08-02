@@ -3,7 +3,7 @@
 import React, { useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { loadNotebookList } from '@/api/dashboard';
-import notebook from '@/api/dashboard'
+import { notebook } from '@/api/dashboard'
 import NotebookBlock from '@/components/notebookBlock';
 
 function NotebookSelector() {

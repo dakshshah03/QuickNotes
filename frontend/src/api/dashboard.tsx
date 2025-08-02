@@ -54,4 +54,4 @@ export const loadNotebookList = async (
     }
 };
 
-export default notebook;
+export {type notebook};

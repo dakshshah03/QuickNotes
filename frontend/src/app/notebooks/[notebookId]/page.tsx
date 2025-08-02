@@ -3,7 +3,7 @@
 // Once a message is sent in the blank chat, will create new chat and redirect user to that chat and load that chat
 
 'use client';
-
+import React, { useState, useEffect } from 'react';
 import { NotebookSidebar, chatItem } from "@/components/notebookSideBar";
 import EmptyChatBox from "@/components/newChatBox";
 import { useRouter } from "next/navigation";
@@ -114,6 +114,8 @@ const chatlist: chatItem[] = [
 
 
 function NotebookPage() {
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
     const router = useRouter();
     return (
         <div className={`
@@ -121,7 +123,13 @@ function NotebookPage() {
                 flex
             `}>
             <div className='w-80 flex-shrink-0'>
-                <NotebookSidebar chatList={chatlist} router={router} notebookId={nb_id}/>
+                <NotebookSidebar
+                    chatList={chatlist}
+                    router={router}
+                    notebookId={nb_id}
+                    selectedFile={selectedFile}
+                    setSelectedFile={setSelectedFile}
+                />
             </div>
             <div className="flex-1">
                 <EmptyChatBox></EmptyChatBox>
