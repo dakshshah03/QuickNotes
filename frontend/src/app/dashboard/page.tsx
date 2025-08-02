@@ -13,33 +13,38 @@ function NotebookSelector() {
     const router = useRouter();
 
     const fetchNotebookList = async () => {
-        // const data = await loadNotebookList(router);
+        const data = await loadNotebookList(
+            router,
+            setNotebooks,
+            setIsLoading,
+            setMessage
+        );
         
-        // Sample data for testing
-        const sampleNotebooks: notebook[] = [
-            {
-                notebook_name: "My First Notebook",
-                updated_time: "2025-07-30T14:30:00Z"
-            },
-            {
-                notebook_name: "Work Notes",
-                updated_time: "2025-07-29T09:15:00Z"
-            },
-            {
-                notebook_name: "Personal Journal",
-                updated_time: "2025-07-28T18:45:00Z"
-            },
-            {
-                notebook_name: "Project Ideas",
-                updated_time: "2025-07-27T12:20:00Z"
-            },
-            {
-                notebook_name: "Meeting Notes",
-                updated_time: "2025-07-26T16:10:00Z"
-            }
-        ];
+        // // Sample data for testing
+        // const sampleNotebooks: notebook[] = [
+        //     {
+        //         notebook_name: "My First Notebook",
+        //         updated_time: "2025-07-30T14:30:00Z"
+        //     },
+        //     {
+        //         notebook_name: "Work Notes",
+        //         updated_time: "2025-07-29T09:15:00Z"
+        //     },
+        //     {
+        //         notebook_name: "Personal Journal",
+        //         updated_time: "2025-07-28T18:45:00Z"
+        //     },
+        //     {
+        //         notebook_name: "Project Ideas",
+        //         updated_time: "2025-07-27T12:20:00Z"
+        //     },
+        //     {
+        //         notebook_name: "Meeting Notes",
+        //         updated_time: "2025-07-26T16:10:00Z"
+        //     }
+        // ];
 
-        setNotebooks(sampleNotebooks);
+        // setNotebooks(sampleNotebooks);
     };
 
     useEffect(() => {

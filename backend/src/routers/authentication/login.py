@@ -22,7 +22,6 @@ async def login_for_access_token(
     try:
         user_id, pw_hash = fetch_pw_hash(conn, form_data.username)
         Settings.password_hasher.verify(pw_hash, form_data.password)
-        print("XXXXXXXXXX")
     except Exception as e:
         print(e)
         raise HTTPException(

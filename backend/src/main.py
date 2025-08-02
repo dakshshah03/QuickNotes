@@ -15,6 +15,7 @@ from core.config import Settings
 # router imports
 from routers.chat import messages, pdf
 from routers.authentication import login
+from routers import dashboard
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -50,5 +51,6 @@ app.add_middleware(
 
 app.include_router(pdf.router)
 app.include_router(login.router)
+app.include_router(dashboard.router)
 
 

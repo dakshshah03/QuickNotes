@@ -7,16 +7,14 @@ from utils.dependencies import DBCxn
 from core.config import Settings
 from schema.authentication import JWTPayload
 from database.dashboard import notebooks
-from backend.src.components.authentication.access_token import verifyJWT
+from components.authentication.access_token import verifyJWT
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 router = APIRouter(prefix="/dashboard", tags=["authentication login"])
 
-
-
 @router.get("/notebooks")
 async def get_notebooks(
-        conn: DBCxn = Depends(),
+        conn: DBCxn,
         token: str = Depends(oauth2_scheme)
     ):
     payload = verifyJWT(token)

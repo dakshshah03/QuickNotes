@@ -13,6 +13,7 @@ interface NotebookList {
 
 export const loadNotebookList = async (
     router: AppRouterInstance,
+    setNotebooks: (notebooks: notebook[]) => void,
     setIsLoading: (isLoading: boolean) => void,
     setMessage: (message: string) => void
 ) => {
@@ -45,6 +46,7 @@ export const loadNotebookList = async (
         }
 
         const data: NotebookList = await response.json();
+        setNotebooks(data.notebooks)
         return data;
     } catch (error) {
         console.error('Error loading notebooks:', error);
