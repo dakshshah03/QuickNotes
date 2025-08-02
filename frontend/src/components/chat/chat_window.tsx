@@ -103,7 +103,7 @@ const ChatWindow = () => {
             const response = await fetch(apiEndpoint, {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(messageData)
             });
@@ -212,8 +212,8 @@ const ChatWindow = () => {
                     {
                         messages.map((msg) => (
                         <div key={msg.messageId} className={`message ${msg.sender}-message`}>
-                        {msg.content}
-                    </div>
+                            {msg.content}
+                        </div>
                     ))}
                 </div>
                 <div className="chat-box">

@@ -3,10 +3,11 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { getAccessToken } from '@/utils/accessToken';
 
 interface notebook {
-
+    notebook_name: string;
+    updated_time: string;
 }
 
-interface LoadNotebookDashboardSuccessResponse {
+interface NotebookList {
     notebooks: notebook[]; // Define proper notebook type
 }
 
@@ -43,10 +44,12 @@ export const loadNotebookList = async (
             throw new Error(`HTTP error: ${response.status}`);
         }
 
-        const data: LoadNotebookDashboardSuccessResponse = await response.json();
+        const data: NotebookList = await response.json();
         return data;
     } catch (error) {
         console.error('Error loading notebooks:', error);
         throw error;
     }
 };
+
+export default notebook;

@@ -38,7 +38,7 @@ function LoginForm() {
                     bg-linear-to-t from-[#015a70] to-[#53003f]
                     h-[500px]
                     w-[400px]
-            `}>
+                `}>
                 <h2 className={`
                     text-4xl
                     p-[30px]

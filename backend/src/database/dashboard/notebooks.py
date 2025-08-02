@@ -1,5 +1,14 @@
 import psycopg
 from uuid import UUID
+from pydantic import BaseModel 
+from typing import List
+
+class notebook(BaseModel):
+    notebook_name: str
+    updated_time: str
+
+class notebookList(BaseModel):
+    notebooks: List[notebook]
 
 def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
     """
