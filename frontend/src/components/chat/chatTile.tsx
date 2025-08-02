@@ -6,7 +6,9 @@ const ChatTile = ({ chatName }: { chatName: string }) => {
                 pl-[20px]
                 pr-[20px]
                 hover:rounded-full
-                hover:bg-[#3c72848e]
+                hover:bg-[#72727242]
+                hover:translate-y-[-3px]
+                hover:shadow-xl/50
                 text-left
                 flex
                 items-center

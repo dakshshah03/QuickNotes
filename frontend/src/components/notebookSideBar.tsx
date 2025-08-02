@@ -21,20 +21,40 @@ const NotebookSidebar = ({ chatList, notebookId, router } : {chatList: chatItem[
                 overflow-y-auto
                 h-full
                 max-h-screen
+                flex
+                flex-col
+                bg-[#00000048]
             ">
-            <div>
-
+            
+            <div className="
+                    flex-shrink-0
+                    bg-amber-600
+                    h-[150px]
+                ">
+                    add button to create new chat as components
+                    <br/>
+                    add button to upload pdf to notebook as component
             </div>
-            {chatList.map((cl) => (
-                <button 
-                    className='grid min-w-full pr-[20px] pl-[20px]'
-                    key={cl.chatId}
-                    onClick={() => router.push(`/notebooks/${notebookId}/${cl.chatId}`)}
-                >
-                    <ChatTile chatName={cl.chatName}></ChatTile>
-                </button>
-            ))}
-        
+            <div className="mt-5 mb-5 ml-10 mr-10 border-b border-[#ffffff6c]"/>
+            <div className="
+                    flex-shrink-0
+                    bg-amber-600
+                    h-[150px]
+                ">
+                div with component listing all uploaded pdfs. Add checkboxes to each one w/ state variable
+            </div>
+            <div className="m-5 ml-10 mr-10 border-b border-[#ffffff6c]"/>
+            <div>
+                {chatList.map((cl) => (
+                    <button 
+                        className='grid min-w-full pr-[20px] pl-[20px]'
+                        key={cl.chatId}
+                        onClick={() => router.push(`/notebooks/${notebookId}/${cl.chatId}`)}
+                    >
+                        <ChatTile chatName={cl.chatName}></ChatTile>
+                    </button>
+                ))}
+            </div>
         </div>
     )
 }
