@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from utils.dependencies import DBCxn
 from core.config import Settings
 from schema.authentication import JWTPayload
-from database.dashboard import notebooks
+from backend.src.database import notebooks
 from components.authentication.access_token import verifyJWT
 
 # TODO: handle clicking notebook (loads notebook)

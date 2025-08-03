@@ -40,7 +40,6 @@ def fetch_pw_hash(conn: psycopg.Connection, email: EmailStr):
             
     except psycopg.Error as e:
         print(f"Database error retrieving password hash for email {email}: {e}")
-        raise
     finally:
         if cursor:
             cursor.close()

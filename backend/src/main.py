@@ -7,13 +7,14 @@ from contextlib import asynccontextmanager
 from typing import Annotated
 
 # local imports
+from routers.chat import documents
 from database.db import db_instance
 from components.rag.pdf_parser import parse_document
 from components.rag.vector_store import DocumentVectorDB
 from core.config import Settings
 
 # router imports
-from routers.chat import messages, pdf
+from routers.chat import messages
 from routers.authentication import login
 from routers import dashboard
 
@@ -49,7 +50,7 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
-app.include_router(pdf.router)
+app.include_router(documents.router)
 app.include_router(login.router)
 app.include_router(dashboard.router)
 

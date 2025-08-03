@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS vector;
+
 CREATE TABLE IF NOT EXISTS users (
     user_id UUID PRIMARY KEY,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -13,6 +15,26 @@ CREATE TABLE IF NOT EXISTS notebooks (
     pdf_storage_dir VARCHAR(255) NOT NULL,
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS chats (
+    chat_id UUID PRIMARY KEY,
+    parent_notebook UUID NOT NULL,
+    chat_name VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS documents (
+    document_id UUID PRIMARY KEY,
+    parent_notebook UUID NOT NULL,
+    document_name VARCHAR(255) NOT NULL,
+    creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS document_embeddings (
+    id UUID PRIMARY KEY, 
+    content TEXT,
+    metadata JSONB,
+    embedding VECTOR(384) -- 384 is for <all-MiniLM-L6-v2> model
 );
 
 -- Begin transaction to ensure atomicity

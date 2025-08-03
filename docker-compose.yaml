@@ -1,9 +1,8 @@
 version: '3.8'
 
-# postgres database
 services:
   db:
-    image: postgres:16-alpine3.19
+    image: pgvector/pgvector:0.8.0-pg16
     container_name: QuickNotesPostgreSQL
     restart: always
     environment:

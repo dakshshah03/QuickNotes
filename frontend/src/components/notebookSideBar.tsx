@@ -22,6 +22,9 @@ const NotebookSidebar = ({ chatList, notebookId, selectedFile, setSelectedFile, 
     setSelectedFile: (selectedFile: File | null) => void,
     router: AppRouterInstance
 }) => {
+
+                
+    console.log(notebookId);
     return (
         <div className="
                 overflow-y-auto

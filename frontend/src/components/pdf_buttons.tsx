@@ -20,9 +20,9 @@ const UploadPDFButton = ({ router, notebookId, selectedFile, setSelectedFile }: 
 
     useEffect(() => {
         if (selectedFile) {
-            uploadPDF(router, notebookId, selectedFile)
+            uploadPDF(router, notebookId, selectedFile);
         }
-    }, [selectedFile]);
+    }, [selectedFile, notebookId]);
 
     return(
         <form className={`
@@ -37,7 +37,15 @@ const UploadPDFButton = ({ router, notebookId, selectedFile, setSelectedFile }: 
                 onChange={handleFileChange}
                 className="hidden" 
             />
-            <button onClick={() => fileInputRef.current?.click()}>Upload File</button>
+            <button
+                type="button"
+                onClick={(e) => {
+                    e.preventDefault();
+                    fileInputRef.current?.click();
+                }}
+            >
+                Upload File
+            </button>
         </form>
     )
 };

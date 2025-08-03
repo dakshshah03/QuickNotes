@@ -6,9 +6,9 @@
 import React, { useState, useEffect } from 'react';
 import { NotebookSidebar, chatItem } from "@/components/notebookSideBar";
 import EmptyChatBox from "@/components/newChatBox";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
-const nb_id = "3123123123123";
+// const nb_id = "3123123123123";
 const chatlist: chatItem[] = [
     {
         chatName: "Introduction to Machine Learning: Deep Learning",
@@ -112,9 +112,16 @@ const chatlist: chatItem[] = [
     }
 ];
 
+interface NotebookPageProps {
+    params: Promise<{
+        notebookId: string
+    }>
+};
 
-function NotebookPage() {
+function NotebookPage({ params }: NotebookPageProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const unwrappedParams = React.use(params);
+    const { notebookId } = unwrappedParams;
 
     const router = useRouter();
     return (
@@ -126,7 +133,7 @@ function NotebookPage() {
                 <NotebookSidebar
                     chatList={chatlist}
                     router={router}
-                    notebookId={nb_id}
+                    notebookId={notebookId}
                     selectedFile={selectedFile}
                     setSelectedFile={setSelectedFile}
                 />
