@@ -2,6 +2,7 @@ import psycopg
 from uuid import UUID
 from pydantic import BaseModel 
 from typing import List
+from fastapi import HTTPException
 
 from utils.exceptions import NotebookNotFoundError
 
@@ -19,6 +20,10 @@ def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
     Args:
         conn (psycopg.Connection): _description_
         notebook_owner (UUID): UUID of the notebook owner (user ID)
+        
+    Raises:
+        HTTPException: For HTTP-specific errors that should be passed to the client
+        psycopg.Error: Database connection or query error
     """
     cursor = None
     notebook_list = notebookList(
@@ -45,9 +50,14 @@ def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
             )
             
             notebook_list.notebooks.append(notebook_item)
-        print(f"Successfully retrieved notebook")
+        print(f"Successfully retrieved {len(notebook_list.notebooks)} notebooks")
     except psycopg.Error as e:
         print(f"Error retrieving notebooks for {notebook_owner}: {e}")
+        # Raise HTTPException instead of re-raising psycopg.Error
+        raise HTTPException(
+            status_code=500,
+            detail="Database error occurred while fetching notebooks"
+        )
     finally:
         if cursor:
             cursor.close()
@@ -58,6 +68,10 @@ def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
 def fetch_owner(conn: psycopg.Connection, notebook_id: UUID) -> UUID:
     """
     returns userId that owns a given notebook
+    
+    Raises:
+        NotebookNotFoundError: When notebook with given ID is not found
+        psycopg.Error: Database connection or query error
     """
     cursor = None
     notebook_owner = None
@@ -80,6 +94,7 @@ def fetch_owner(conn: psycopg.Connection, notebook_id: UUID) -> UUID:
         
     except psycopg.Error as e:
         print(f"Database error retrieving notebook with ID {notebook_id}: {e}")
+        raise
     finally:
         if cursor:
             cursor.close()

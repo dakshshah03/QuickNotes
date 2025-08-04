@@ -2,6 +2,8 @@ from fastapi import HTTPException, Depends
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
+import psycopg
+from jwt import PyJWTError
 
 from utils.dependencies import DBCxn
 from core.config import Settings
@@ -17,8 +19,31 @@ async def get_notebooks(
         conn: DBCxn,
         token: str = Depends(oauth2_scheme)
     ):
-    payload = verifyJWT(token)
-    user_id = payload.get("user_id")
-    return notebooks.fetch_notebook_list(conn, user_id)
+    try:
+        payload = verifyJWT(token)
+        user_id = payload.get("user_id")
+        
+        if not user_id:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token: user_id not found"
+            )
+        
+        notebook_list = notebooks.fetch_notebook_list(conn, user_id)
+        return notebook_list
+        
+    except HTTPException:
+        # Re-raise HTTPException as-is (from verifyJWT or database functions)
+        raise
+    except PyJWTError:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail="Internal server error"
+        )
 
 

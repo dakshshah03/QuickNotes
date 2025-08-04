@@ -39,5 +39,6 @@ def verifyJWT(token: str):
     except jwt.ExpiredSignatureError:
         raise expired_exception
     except jwt.PyJWTError:
+        print("xxxxxxx")
         raise credentials_exception
 
