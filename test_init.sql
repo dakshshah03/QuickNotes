@@ -1,7 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE IF NOT EXISTS users (
-    user_id UUID PRIMARY KEY,
+    user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(100) UNIQUE NOT NULL,
     name VARCHAR(50) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS notebooks (
-    notebook_id UUID PRIMARY KEY,
+    notebook_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     notebook_owner UUID NOT NULL,
     notebook_name VARCHAR(255) NOT NULL,
     pdf_storage_dir VARCHAR(255) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS notebooks (
 );
 
 CREATE TABLE IF NOT EXISTS chats (
-    chat_id UUID PRIMARY KEY,
+    chat_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     parent_notebook UUID NOT NULL,
     chat_name VARCHAR(30) NOT NULL,
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS chats (
 );
 
 CREATE TABLE IF NOT EXISTS documents (
-    document_id UUID PRIMARY KEY,
+    document_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     parent_notebook UUID NOT NULL,
     document_name VARCHAR(255) NOT NULL,
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

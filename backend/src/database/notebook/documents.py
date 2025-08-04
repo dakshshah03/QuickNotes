@@ -6,9 +6,9 @@ from datetime import datetime
 
 class document(BaseModel):
     id: Optional[UUID] = None
-    parent_notebook: Optional[UUID]
-    name: Optional[str]
-    creation_time: Optional[datetime]
+    parent_notebook: Optional[UUID] = None
+    name: Optional[str] = None
+    creation_time: Optional[datetime] = None
 
 def create_document(conn: psycopg.Connection, doc: document):
     """
@@ -21,18 +21,19 @@ def create_document(conn: psycopg.Connection, doc: document):
     cursor = None
     try:
         cursor = conn.cursor()
-        doc_id = uuid4()
+        
         insert_doc_query = """
         INSERT INTO documents
-        (document_id, parent_notebook, document_name)
-        VALUES (%s, %s, %s);
+        (parent_notebook, document_name)
+        VALUES (%s, %s);
         """
-        cursor.execute(insert_doc_query, (doc_id, doc.parent_notebook, doc.name,))
+        cursor.execute(insert_doc_query, (doc.parent_notebook, doc.name,))
+        
         conn.commit()
     except psycopg.Error as e:
+        conn.rollback()
         if isinstance(e, psycopg.errors.UniqueViolation):
-            print(f"UUID duplicate found when creating new document, generating new UUID: {e}")
-            create_document(conn, doc)
+            print(f"UUID duplicate found when inserting new document: {e}")
         else:
             print(f"Error inserting document into table: {e}")
             raise

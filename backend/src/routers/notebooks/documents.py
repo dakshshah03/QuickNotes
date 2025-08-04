@@ -22,9 +22,22 @@ async def upload_pdf(
         file: UploadFile = File(...,),
         parent_notebook: Optional[UUID] = Form(None)
     ):
+    if not parent_notebook:
+        raise HTTPException(
+            status_code=400,
+            detail="Parent notebook ID is required."
+        )
+    
     payload = verifyJWT(token)
     user_id = UUID(payload.get("user_id"))
-    notebook_owner = fetch_owner(conn, parent_notebook)
+    
+    try:
+        notebook_owner = fetch_owner(conn, parent_notebook)
+    except Exception as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Notebook with ID {parent_notebook} not found."
+        )
     
     if user_id != notebook_owner:
         raise HTTPException(
@@ -38,8 +51,13 @@ async def upload_pdf(
             detail=f"Invalid file type. Expected 'application/pdf', but received '{file.content_type}'."
         )
     
-    return save_pdf(conn, file, save_dir=UPLOAD_DIRECTORY)
-    
+    try:
+        return save_pdf(conn, file, notebook_id=parent_notebook, save_dir=UPLOAD_DIRECTORY)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error saving PDF: {str(e)}"
+        )
     
 
 # TODO: make endpoint to return list of pdf names
