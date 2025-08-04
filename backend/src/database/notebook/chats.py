@@ -10,9 +10,6 @@ class chatMetadata(BaseModel):
     name: Optional[UUID]
     updated_time: Optional[datetime]
     
-class chatMetadataList(BaseModel):
-    chats: List[chatMetadata]
-
 def create_chat(conn: psycopg.Connection, chat: chatMetadata):
     cursor = None
     try:
@@ -32,12 +29,13 @@ def create_chat(conn: psycopg.Connection, chat: chatMetadata):
             create_chat(conn, chat)
         else:
             print(f"Error inserting document into table: {e}")
+            raise
     finally:
         if cursor:
             cursor.close()
 
     
-def get_chat_list(conn: psycopg.Connection, notebook_id: UUID) -> chatMetadataList:
+def get_chat_list(conn: psycopg.Connection, notebook_id: UUID) -> List[chatMetadata]:
     """
     returns a list of chats and their associated metadata
 
@@ -46,12 +44,10 @@ def get_chat_list(conn: psycopg.Connection, notebook_id: UUID) -> chatMetadataLi
         notebook_id (UUID): parent notebook
 
     Returns:
-        chat_metadata_list: lsit of chats and their metadata
+        List[chatMetadata]: lsit of chats and their metadata
     """
     cursor = None
-    chat_metadata_list = chatMetadata(
-        chats = []
-    )
+    chats = []
     
     try:
         cursor = conn.cursor()
@@ -72,13 +68,14 @@ def get_chat_list(conn: psycopg.Connection, notebook_id: UUID) -> chatMetadataLi
                creation_time=creation_time
             )
             
-            chat_metadata_list.chats.append(notebook_item)
+            chats.append(notebook_item)
         print(f"Successfully retrieved notebook")
         
     except psycopg.Error as e:
         print(f"Error retrieving notebooks for {notebook_id}: {e}")
+        raise
     finally:
         if cursor:
             cursor.close()
     
-    return chat_metadata_list
+    return chats

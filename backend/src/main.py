@@ -7,16 +7,16 @@ from contextlib import asynccontextmanager
 from typing import Annotated
 
 # local imports
-from routers.chat import documents
+from routers.notebooks import documents
 from database.db import db_instance
 from components.rag.pdf_parser import parse_document
 from components.rag.vector_store import DocumentVectorDB
 from core.config import Settings
 
 # router imports
-from routers.chat import messages
 from routers.authentication import login
-from routers import dashboard
+from routers.dashboard import dashboard
+from routers.notebooks import documents
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -50,8 +50,8 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
-app.include_router(documents.router)
 app.include_router(login.router)
 app.include_router(dashboard.router)
+app.include_router(documents.router)
 
 

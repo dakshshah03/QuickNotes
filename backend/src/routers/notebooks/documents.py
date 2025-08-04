@@ -10,12 +10,12 @@ from database.notebooks import fetch_owner
 from components.files.pdf import save_pdf
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
-router = APIRouter(prefix="/pdf", tags=["Chat PDF"])
+router = APIRouter(prefix="/notebook", tags=["Chat PDF"])
 UPLOAD_DIRECTORY = "./pdfs/"
 # TODO: When new pdf uploaded, chunk pdf and add to vector store
 
 
-@router.post("/upload")
+@router.post("/document/upload")
 async def upload_pdf(
         conn: DBCxn, 
         token: str = Depends(oauth2_scheme),
@@ -38,10 +38,7 @@ async def upload_pdf(
             detail=f"Invalid file type. Expected 'application/pdf', but received '{file.content_type}'."
         )
     
-    # TODO: chunk pdf
-    # TODO: store chunks in document_embeddings vectorDB
-    
-    return save_pdf(file, save_dir=UPLOAD_DIRECTORY)
+    return save_pdf(conn, file, save_dir=UPLOAD_DIRECTORY)
     
     
 

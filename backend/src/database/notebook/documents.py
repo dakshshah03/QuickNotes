@@ -10,10 +10,7 @@ class document(BaseModel):
     name: Optional[str]
     creation_time: Optional[datetime]
 
-class documentList(BaseModel):
-    documents: List[document]
-    
-def store_document(conn: psycopg.Connection, doc: document):
+def create_document(conn: psycopg.Connection, doc: document):
     """
     Stores document metadata in a table when user uploads a new document
     
@@ -31,19 +28,19 @@ def store_document(conn: psycopg.Connection, doc: document):
         VALUES (%s, %s, %s);
         """
         cursor.execute(insert_doc_query, (doc_id, doc.parent_notebook, doc.name,))
-        
         conn.commit()
     except psycopg.Error as e:
         if isinstance(e, psycopg.errors.UniqueViolation):
             print(f"UUID duplicate found when creating new document, generating new UUID: {e}")
-            store_document(conn, doc)
+            create_document(conn, doc)
         else:
             print(f"Error inserting document into table: {e}")
+            raise
     finally:
         if cursor:
             cursor.close()
 
-def get_document_list(conn: psycopg.Connection, notebook_id: UUID) -> documentList:
+def get_document_list(conn: psycopg.Connection, notebook_id: UUID) -> List[document]:
     """
     returns a list of documents associated with a given notebok
 
@@ -52,12 +49,10 @@ def get_document_list(conn: psycopg.Connection, notebook_id: UUID) -> documentLi
         notebook_id (UUID): parent notebook
 
     Returns:
-        documentList: list of documents
+        List[document]: list of documents
     """
     cursor = None
-    document_list = documentList(
-        documents = []
-    )
+    documents = []
     
     try:
         cursor = conn.cursor()
@@ -67,24 +62,20 @@ def get_document_list(conn: psycopg.Connection, notebook_id: UUID) -> documentLi
         WHERE parent_notebook = %s;
         """
         cursor.execute(retrieve_doc_list_query, (notebook_id,))
-        
         rows = cursor.fetchall()
         for row in rows:
             doc_id, doc_name, creation_time = row[0], row[1], row[2].isoformat()
-            
             notebook_item = document(
                id=doc_id,
                name=doc_name,
                creation_time=creation_time
             )
-            
-            document_list.documents.append(notebook_item)
+            documents.append(notebook_item)
         print(f"Successfully retrieved notebook")
-        
     except psycopg.Error as e:
         print(f"Error retrieving notebooks for {notebook_id}: {e}")
+        raise
     finally:
         if cursor:
             cursor.close()
-    
-    return document_list
+    return documents
