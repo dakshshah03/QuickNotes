@@ -1,18 +1,61 @@
 import psycopg
-from uuid import UUID
+from uuid import uuid4,UUID
 from pydantic import BaseModel 
 from typing import List
 from fastapi import HTTPException
+from typing import Optional
 
 from utils.exceptions import NotebookNotFoundError
 
 class notebook(BaseModel):
-    notebook_id: UUID
+    notebook_id: Optional[UUID]
+    notebook_owner: Optional[UUID]
     notebook_name: str
-    updated_time: str
+    storage_dir: Optional[str]
+    updated_time: Optional[str]
 
 class notebookList(BaseModel):
     notebooks: List[notebook]
+
+def insert_notebook(conn: psycopg.Connection, nb: notebook) -> UUID:
+    """
+    inserts a new notebook entry in the DB
+
+    Args:
+        conn (psycopg.Connection): _description_
+        nb (notebook): notebook model with owner, name, and storage dir
+
+    Returns:
+        UUID: generated notebook id
+    """
+    cursor = None
+    notebook_id = None
+    try:
+        cursor = conn.cursor()
+        create_notebook_query = """
+        INSERT INTO notebooks
+        (notebook_owner, notebook_name, pdf_storage_dir)
+        VALUES (%s, %s, %s)
+        RETURNING notebook_id;
+        """
+        cursor.execute(create_notebook_query, (nb.notebook_owner, nb.notebook_name, nb.storage_dir))
+        
+        result = cursor.fetchone()
+        if result:
+            notebook_id = result[0]
+        
+        conn.commit()
+    except psycopg.Error as e:
+        if isinstance(e, psycopg.errors.UniqueViolation):
+            print(f"UUID duplicate found when creating new notebook: {e}")
+        else:
+            print(f"Error creating new notebook: {e}")
+            raise
+    finally:
+        if cursor:
+            cursor.close()
+    
+    return notebook_id
 
 def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
     """

@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Form
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
@@ -10,7 +10,7 @@ from core.config import Settings
 from schema.authentication import JWTPayload
 from components.authentication.access_token import verifyJWT
 
-from database.notebooks import fetch_owner
+from database.notebooks import fetch_owner, insert_notebook, notebook
 from database.notebook.documents import get_document_list
 from database.notebook.chats import get_chat_list
 
@@ -46,3 +46,18 @@ async def load_notebook(
         "documents": docs,
         "chats": chats
     }
+
+# @router.post("/create")
+# async def create_notebook(
+#         conn: DBCxn,
+#         token: str = Depends(oauth2_scheme)
+#         notebook_name: str = Form(None)
+#     ):
+#     payload = verifyJWT(token)
+#     user_id = payload.get("user_id")
+    
+#     nb = notebook(
+#         notebook_owner=user_id,
+#         notebook_name=
+#     )
+#     notebook_id = insert_notebook(conn, )

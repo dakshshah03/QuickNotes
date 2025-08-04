@@ -14,21 +14,20 @@ def create_chat(conn: psycopg.Connection, chat: chatMetadata):
     cursor = None
     try:
         cursor = conn.cursor()
-        chat_id = uuid4()
         insert_chat_query = """
         INSERT INTO chats
-        (chat_id, parent_notebook, chat_name)
-        VALUES (%s, %s, %s)
+        (parent_notebook, chat_name)
+        VALUES (%s, %s)
+        RETURNING chat_id;
         """
-        cursor.execute(insert_chat_query, (chat_id, chat.parent_notebook, chat.name))
+        cursor.execute(insert_chat_query, (chat.parent_notebook, chat.name,))
         
         conn.commit()
     except psycopg.Error as e:
         if isinstance(e, psycopg.errors.UniqueViolation):
-            print(f"UUID duplicate found when creating new chat, generating new UUID: {e}")
-            create_chat(conn, chat)
+            print(f"UUID duplicate found when creating new chat: {e}")
         else:
-            print(f"Error inserting document into table: {e}")
+            print(f"Error creating new chat: {e}")
             raise
     finally:
         if cursor:
