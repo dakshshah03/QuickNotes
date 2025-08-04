@@ -33,7 +33,6 @@ async def get_notebooks(
         return notebook_list
         
     except HTTPException:
-        # Re-raise HTTPException as-is (from verifyJWT or database functions)
         raise
     except PyJWTError:
         raise HTTPException(

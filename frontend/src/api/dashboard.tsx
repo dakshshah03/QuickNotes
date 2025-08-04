@@ -5,6 +5,7 @@ import { getAccessToken } from '@/utils/accessToken';
 interface notebook {
     notebook_name: string;
     updated_time: string;
+    notebook_id: string;
 }
 
 interface NotebookList {
@@ -34,16 +35,17 @@ export const loadNotebookList = async (
             return;
         }
 
-        // TODO: handle this in caller? 
+        // TODO: handle this
         // if (response.status === 403) {
         //     setMessage(`Access Forbidden: ${response.status} Forbidden`);
         //     return;
         // }
-        console.log("Dashboard Loaded");
 
         if (!response.ok) {
             throw new Error(`HTTP error: ${response.status}`);
         }
+
+        console.log("Dashboard Loaded");
 
         const data: NotebookList = await response.json();
         setNotebooks(data.notebooks)

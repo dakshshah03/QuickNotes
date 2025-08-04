@@ -1,20 +1,17 @@
 from fastapi import HTTPException, Depends
-from typing import Annotated
+from typing import Generator, Annotated
 from database.db import db_instance
 import psycopg
 
-async def get_db_connection():
+def get_db_connection() -> Generator[psycopg.Connection, None, None]:
+    """Dependency that provides a database connection and ensures it's returned to the pool"""
+    conn = None
     try:
-        with db_instance.get_connection() as conn:
-            yield conn
-    except HTTPException:
-        # Re-raise HTTPExceptions (like 401 auth errors) as-is
-        raise
-    except psycopg.Error as e:
-        print(f"Database connection error: {e}")
-        raise HTTPException(status_code=500, detail="Database connection error")
-    except Exception as e:
-        print(f"Unexpected error getting database connection: {e}")
-        raise HTTPException(status_code=500, detail="Database connection error")
-    
+        conn = db_instance.get_connection()
+        yield conn
+    finally:
+        if conn:
+            db_instance.return_connection(conn)
+
+# Type alias for dependency injection
 DBCxn = Annotated[psycopg.Connection, Depends(get_db_connection)]

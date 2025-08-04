@@ -12,7 +12,7 @@ export const uploadPDF = async (
         const pdfData = new FormData();
         pdfData.append('file', selectedFile);
         pdfData.append('parent_notebook', notebookId);
-        const response = await fetch('http://localhost:8000/pdf/upload', {
+        const response = await fetch('http://localhost:8000/notebook/document/upload', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,

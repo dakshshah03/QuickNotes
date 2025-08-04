@@ -49,6 +49,11 @@ class Database:
         
         return self.pool.getconn()
 
+    def return_connection(self, conn):
+        """Return a connection back to the pool"""
+        if self.pool and conn:
+            self.pool.putconn(conn)
+
     def close(self):
         if self.pool:
             self.pool.close()

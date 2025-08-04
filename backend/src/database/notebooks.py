@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from utils.exceptions import NotebookNotFoundError
 
 class notebook(BaseModel):
+    notebook_id: UUID
     notebook_name: str
     updated_time: str
 
@@ -33,7 +34,7 @@ def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
     try:
         cursor = conn.cursor()
         notebook_list_query = """
-        SELECT notebook_name, updated_time
+        SELECT notebook_id, notebook_name, updated_time
         FROM notebooks
         WHERE notebook_owner = %s;
         """
@@ -42,9 +43,10 @@ def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
         
         rows = cursor.fetchall()
         for row in rows:
-            notebook_name, updated_time = row[0], row[1].isoformat()
+            notebook_id, notebook_name, updated_time = row[0], row[1], row[2].isoformat()
             
             notebook_item = notebook(
+                notebook_id=notebook_id,
                 notebook_name=notebook_name,
                 updated_time=updated_time
             )
