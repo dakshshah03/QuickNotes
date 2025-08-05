@@ -42,14 +42,12 @@ def insert_notebook(conn: psycopg.Connection, nb: notebook) -> notebook:
         
         result = cursor.fetchone()
         if result:
-            notebook_id, updated_time = result[0]
+            notebook_id, updated_time = result[0], result[1].isoformat()
             new_notebook = notebook(
                 notebook_id=notebook_id,
                 notebook_name=nb.notebook_name,
                 updated_time=updated_time
             )
-        
-        conn.commit()
     except psycopg.Error as e:
         if isinstance(e, psycopg.errors.UniqueViolation):
             print(f"UUID duplicate found when creating new notebook: {e}")
@@ -104,7 +102,6 @@ def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
         print(f"Successfully retrieved {len(notebook_list.notebooks)} notebooks")
     except psycopg.Error as e:
         print(f"Error retrieving notebooks for {notebook_owner}: {e}")
-        # Raise HTTPException instead of re-raising psycopg.Error
         raise HTTPException(
             status_code=500,
             detail="Database error occurred while fetching notebooks"

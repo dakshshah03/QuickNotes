@@ -15,8 +15,8 @@ export const createNotebook = async (
 
         const formData = new FormData();
         formData.append('notebook_name', notebookName);
-
-        const response = await fetch('http://localhost:8000/dashboard/notebooks', {
+        
+        const response = await fetch('http://localhost:8000/notebook/create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${accessToken}`

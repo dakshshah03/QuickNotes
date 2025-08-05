@@ -17,3 +17,36 @@ export const NotebookTile = ({ notebook_name, updated_time }: { notebook_name?: 
         </div>
     )
 };
+
+export const CreateNotebookInput = ({ setName }: { setName: (name: string) => void }) => {
+    const [inputValue, setInputValue] = React.useState<string>('');
+
+    return (
+        <div className="flex flex-col items-center">
+            <input
+                type="text"
+                placeholder="Enter notebook name"
+                className="
+                border
+                border-gray-300
+                rounded-md
+                p-2
+                w-full"
+                onChange={(e) => setInputValue(e.target.value)}
+            />
+            <button
+                className="
+                mt-2
+                 bg-blue-500
+                 text-white
+                 px-4
+                 py-2
+                 rounded-md
+                 hover:bg-blue-600"
+                onClick={() => setName(inputValue)}
+            >
+                Submit
+            </button>
+        </div>
+    );
+};

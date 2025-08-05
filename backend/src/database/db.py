@@ -44,9 +44,8 @@ class Database:
             self.pool = None
             
     def get_connection(self):
-        if(self.pool is None):
+        if self.pool is None:
             raise RuntimeError("Connection pool not initialized")
-        
         return self.pool.getconn()
 
     def return_connection(self, conn):

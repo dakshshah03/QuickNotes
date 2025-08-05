@@ -8,7 +8,17 @@ def get_db_connection() -> Generator[psycopg.Connection, None, None]:
     conn = None
     try:
         conn = db_instance.get_connection()
+        conn.autocommit = False
         yield conn
+        
+        conn.commit()
+    except Exception as e:
+        if conn:
+            try:
+                conn.rollback()
+            except Exception as rollback_error:
+                print(f"Error during rollback: {rollback_error}")
+        raise
     finally:
         if conn:
             db_instance.return_connection(conn)

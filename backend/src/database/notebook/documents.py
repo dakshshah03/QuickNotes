@@ -31,12 +31,11 @@ def create_document(conn: psycopg.Connection, doc: document):
         
         conn.commit()
     except psycopg.Error as e:
-        conn.rollback()
         if isinstance(e, psycopg.errors.UniqueViolation):
             print(f"UUID duplicate found when inserting new document: {e}")
         else:
             print(f"Error inserting document into table: {e}")
-            raise
+        raise
     finally:
         if cursor:
             cursor.close()

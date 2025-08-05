@@ -17,7 +17,7 @@ from database.notebook.chats import get_chat_list
 
 # TODO: handle clicking notebook (loads notebook)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
-router = APIRouter(prefix="/notebook", tags=["authentication login"])
+router = APIRouter(prefix="/notebook", tags=["notebook"])
 
 # load blank chat (loads current notebook after authenticating JWT)
 # returns list of chats and documents in a given chat
@@ -52,11 +52,18 @@ async def load_notebook(
 async def create_notebook(
         conn: DBCxn,
         token: str = Depends(oauth2_scheme),
-        notebook_name: str = Form(None)
+        notebook_name: str = Form(...)
     ):
+    new_notebook = None
     try:
         payload = verifyJWT(token)
         user_id = payload.get("user_id")
+        
+        if not user_id:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token payload"
+            )
         
         nb = notebook(
             notebook_owner=user_id,
@@ -64,8 +71,6 @@ async def create_notebook(
             storage_dir=Settings.pdf_storage_dir
         )
         new_notebook = insert_notebook(conn, nb)
-        
-        return new_notebook
     except HTTPException:
         raise
     except PyJWTError:
@@ -74,7 +79,12 @@ async def create_notebook(
             detail="Invalid token"
         )
     except Exception as e:
+        print(e)
         raise HTTPException(
             status_code=500,
-            detail="Internal server error"
+            detail=f"Internal server error: {e}"
+        )
+    return JSONResponse(
+            status_code=201,
+            content=new_notebook.model_dump_json()
         )

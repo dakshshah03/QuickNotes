@@ -28,7 +28,7 @@ def create_chat(conn: psycopg.Connection, chat: chatMetadata):
             print(f"UUID duplicate found when creating new chat: {e}")
         else:
             print(f"Error creating new chat: {e}")
-            raise
+        raise
     finally:
         if cursor:
             cursor.close()
