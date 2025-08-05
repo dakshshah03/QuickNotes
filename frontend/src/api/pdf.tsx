@@ -17,9 +17,13 @@ export const uploadPDF = async (
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
             },
-            body: pdfData,
-            signal: AbortSignal.timeout(5000)
+            body: pdfData
         });
+
+        if (response.status === 401) {
+            router.push('/auth/login');
+            return;
+        }
 
         console.log(response.status);
         // TODO: handle errors

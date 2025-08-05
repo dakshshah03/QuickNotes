@@ -12,6 +12,8 @@ class Settings:
     db_port: str = os.getenv("POSTGRES_PORT")
     db_name: str = os.getenv("POSTGRES_DB_NAME")
     
+    pdf_storage_dir: str = os.getenv("PDF_STORAGE_DIR")
+    
     # API Keys
     openai_api_key = os.getenv("OPENAI_API_KEY")
     llama_parse_api_key = os.getenv("LLAMA_CLOUD_API_KEY")

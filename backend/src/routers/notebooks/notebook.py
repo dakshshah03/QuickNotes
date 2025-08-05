@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 
 from uuid import UUID
+from jwt import PyJWTError
 
 from utils.dependencies import DBCxn
 from core.config import Settings
@@ -47,17 +48,33 @@ async def load_notebook(
         "chats": chats
     }
 
-# @router.post("/create")
-# async def create_notebook(
-#         conn: DBCxn,
-#         token: str = Depends(oauth2_scheme)
-#         notebook_name: str = Form(None)
-#     ):
-#     payload = verifyJWT(token)
-#     user_id = payload.get("user_id")
-    
-#     nb = notebook(
-#         notebook_owner=user_id,
-#         notebook_name=
-#     )
-#     notebook_id = insert_notebook(conn, )
+@router.post("/create")
+async def create_notebook(
+        conn: DBCxn,
+        token: str = Depends(oauth2_scheme),
+        notebook_name: str = Form(None)
+    ):
+    try:
+        payload = verifyJWT(token)
+        user_id = payload.get("user_id")
+        
+        nb = notebook(
+            notebook_owner=user_id,
+            notebook_name=notebook_name,
+            storage_dir=Settings.pdf_storage_dir
+        )
+        new_notebook = insert_notebook(conn, nb)
+        
+        return new_notebook
+    except HTTPException:
+        raise
+    except PyJWTError:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail="Internal server error"
+        )

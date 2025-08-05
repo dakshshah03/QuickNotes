@@ -8,16 +8,16 @@ from typing import Optional
 from utils.exceptions import NotebookNotFoundError
 
 class notebook(BaseModel):
-    notebook_id: Optional[UUID]
-    notebook_owner: Optional[UUID]
+    notebook_id: Optional[UUID] = None
+    notebook_owner: Optional[UUID] = None
     notebook_name: str
-    storage_dir: Optional[str]
-    updated_time: Optional[str]
+    storage_dir: Optional[str] = None
+    updated_time: Optional[str] = None
 
 class notebookList(BaseModel):
     notebooks: List[notebook]
 
-def insert_notebook(conn: psycopg.Connection, nb: notebook) -> UUID:
+def insert_notebook(conn: psycopg.Connection, nb: notebook) -> notebook:
     """
     inserts a new notebook entry in the DB
 
@@ -29,25 +29,31 @@ def insert_notebook(conn: psycopg.Connection, nb: notebook) -> UUID:
         UUID: generated notebook id
     """
     cursor = None
-    notebook_id = None
+    new_notebook = None    
     try:
         cursor = conn.cursor()
         create_notebook_query = """
         INSERT INTO notebooks
         (notebook_owner, notebook_name, pdf_storage_dir)
         VALUES (%s, %s, %s)
-        RETURNING notebook_id;
+        RETURNING notebook_id, updated_time;
         """
         cursor.execute(create_notebook_query, (nb.notebook_owner, nb.notebook_name, nb.storage_dir))
         
         result = cursor.fetchone()
         if result:
-            notebook_id = result[0]
+            notebook_id, updated_time = result[0]
+            new_notebook = notebook(
+                notebook_id=notebook_id,
+                notebook_name=nb.notebook_name,
+                updated_time=updated_time
+            )
         
         conn.commit()
     except psycopg.Error as e:
         if isinstance(e, psycopg.errors.UniqueViolation):
             print(f"UUID duplicate found when creating new notebook: {e}")
+            raise
         else:
             print(f"Error creating new notebook: {e}")
             raise
@@ -55,7 +61,7 @@ def insert_notebook(conn: psycopg.Connection, nb: notebook) -> UUID:
         if cursor:
             cursor.close()
     
-    return notebook_id
+    return new_notebook
 
 def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
     """

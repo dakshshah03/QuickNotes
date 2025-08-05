@@ -8,10 +8,11 @@ from uuid import UUID
 from components.authentication.access_token import verifyJWT
 from database.notebooks import fetch_owner
 from components.files.pdf import save_pdf
+from core.config import Settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 router = APIRouter(prefix="/notebook", tags=["Chat PDF"])
-UPLOAD_DIRECTORY = "./pdfs/"
+UPLOAD_DIRECTORY = Settings.pdf_storage_dir
 # TODO: When new pdf uploaded, chunk pdf and add to vector store
 
 
@@ -20,14 +21,8 @@ async def upload_pdf(
         conn: DBCxn, 
         token: str = Depends(oauth2_scheme),
         file: UploadFile = File(...,),
-        parent_notebook: Optional[UUID] = Form(None)
-    ):
-    if not parent_notebook:
-        raise HTTPException(
-            status_code=400,
-            detail="Parent notebook ID is required."
-        )
-    
+        parent_notebook: UUID = Form(None)
+    ):    
     payload = verifyJWT(token)
     user_id = UUID(payload.get("user_id"))
     
