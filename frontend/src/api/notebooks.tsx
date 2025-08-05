@@ -9,13 +9,16 @@ interface chatItem {
     updated_time: string;
 }
 
-interface document {
+interface documentItem {
     id: string;
+    parent_notebook: string;
+    name: string;
+    creation_time: string;
 }
 
 interface loadResponse {
     chats: chatItem[];
-    documents: null;
+    documents: documentItem[];
 }
 
 export const createNotebook = async (
@@ -58,10 +61,11 @@ export const createNotebook = async (
     }
 };
 
-export const loadChatList = async (
+export const loadSidebar = async (
     router: AppRouterInstance,
     notebookId: string,
     setChats: (chats: chatItem[]) => void,
+    setDocuments: (documents: documentItem[]) => void,
     setIsLoading: (isLoading: boolean) => void,
     setMessage: (message: string) => void
 ) => {
@@ -95,4 +99,4 @@ export const loadChatList = async (
         throw error;
     }
 };
-export {type chatItem}
+export {type chatItem, type documentItem}

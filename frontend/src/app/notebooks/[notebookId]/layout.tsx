@@ -8,13 +8,13 @@ import { NotebookSidebar } from "@/components/notebookSideBar";
 import EmptyChatBox from "@/components/newChatBox";
 import { useRouter, useParams } from "next/navigation";
 
-interface NotebookPageProps {
-    params: Promise<{
-        notebookId: string
-    }>
-};
-
-async function NotebookPage({ params }: NotebookPageProps) {
+async function NotebookLayout({
+    children,
+    params
+}: {
+    children: React.ReactNode,
+    params: Promise<{notebookId: string}>
+}) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [activeDocuments, setActive] = useState<Set<string>>(new Set());
     const [message, setMessage] = useState<string>('');
@@ -50,4 +50,4 @@ async function NotebookPage({ params }: NotebookPageProps) {
     )
 };
 
-export default NotebookPage;
+export default NotebookLayout;
