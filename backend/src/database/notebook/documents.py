@@ -6,11 +6,11 @@ from datetime import datetime
 
 class document(BaseModel):
     id: Optional[UUID] = None
-    parent_notebook: Optional[UUID] = None
+    parent_notebook: UUID
     name: Optional[str] = None
     creation_time: Optional[datetime] = None
 
-def create_document(conn: psycopg.Connection, doc: document):
+def create_document(conn: psycopg.Connection, doc: document) -> document:
     """
     Stores document metadata in a table when user uploads a new document
     
@@ -19,26 +19,38 @@ def create_document(conn: psycopg.Connection, doc: document):
         doc (document): fields for parent notebook and name should be filled
     """
     cursor = None
+    new_document: document = None
     try:
         cursor = conn.cursor()
         
         insert_doc_query = """
         INSERT INTO documents
         (parent_notebook, document_name)
-        VALUES (%s, %s);
+        VALUES (%s, %s)
+        RETURNING document_id, creation_time;
         """
         cursor.execute(insert_doc_query, (doc.parent_notebook, doc.name,))
         
-        conn.commit()
+        result = cursor.fetchone()
+        if result:
+            chat_id, creation_time = result[0], result[1].isoformat()
+            new_document = document(
+                chat_id=chat_id,
+                name=doc.name,
+                parent_notebook=doc.parent_notebook,
+                creation_time=creation_time
+            )
     except psycopg.Error as e:
         if isinstance(e, psycopg.errors.UniqueViolation):
             print(f"UUID duplicate found when inserting new document: {e}")
         else:
-            print(f"Error inserting document into table: {e}")
+            print(f"Error creating document: {e}")
         raise
     finally:
         if cursor:
             cursor.close()
+    
+    return new_document
 
 def get_document_list(conn: psycopg.Connection, notebook_id: UUID) -> List[document]:
     """

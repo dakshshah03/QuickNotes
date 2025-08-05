@@ -4,7 +4,7 @@ services:
   db:
     image: pgvector/pgvector:0.8.0-pg16
     container_name: QuickNotesPostgreSQL
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: notebookDB
       POSTGRES_USER: ${POSTGRES_USER}

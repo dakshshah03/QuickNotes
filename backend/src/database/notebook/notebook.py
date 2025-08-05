@@ -29,7 +29,7 @@ def insert_notebook(conn: psycopg.Connection, nb: notebook) -> notebook:
         UUID: generated notebook id
     """
     cursor = None
-    new_notebook = None    
+    new_notebook: notebook = None    
     try:
         cursor = conn.cursor()
         create_notebook_query = """
@@ -51,10 +51,9 @@ def insert_notebook(conn: psycopg.Connection, nb: notebook) -> notebook:
     except psycopg.Error as e:
         if isinstance(e, psycopg.errors.UniqueViolation):
             print(f"UUID duplicate found when creating new notebook: {e}")
-            raise
         else:
             print(f"Error creating new notebook: {e}")
-            raise
+        raise
     finally:
         if cursor:
             cursor.close()

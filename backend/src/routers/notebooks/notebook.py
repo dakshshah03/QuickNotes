@@ -11,9 +11,9 @@ from core.config import Settings
 from schema.authentication import JWTPayload
 from components.authentication.access_token import verifyJWT
 
-from database.notebooks import fetch_owner, insert_notebook, notebook
+from database.notebook.notebook import fetch_owner, insert_notebook, notebook
 from database.notebook.documents import get_document_list
-from database.notebook.chats import get_chat_list
+from database.chats.chat import get_chat_list
 
 # TODO: handle clicking notebook (loads notebook)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")

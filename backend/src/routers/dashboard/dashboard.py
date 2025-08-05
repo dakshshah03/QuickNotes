@@ -8,7 +8,7 @@ from jwt import PyJWTError
 from utils.dependencies import DBCxn
 from core.config import Settings
 from schema.authentication import JWTPayload
-from database import notebooks
+from backend.src.database.notebook import notebook
 from components.authentication.access_token import verifyJWT
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
@@ -29,7 +29,7 @@ async def get_notebooks(
                 detail="Invalid token: user_id not found"
             )
         
-        notebook_list = notebooks.fetch_notebook_list(conn, user_id)
+        notebook_list = notebook.fetch_notebook_list(conn, user_id)
         return notebook_list
         
     except HTTPException:

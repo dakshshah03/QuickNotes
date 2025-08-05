@@ -7,8 +7,8 @@
 TODO:
 - `/auth/create/`: create account
 
-### Dashboard
--`./dashboard/dashboard.py`
+### Dashboard/menu
+- `./dashboard/dashboard.py`
     - `GET /dashboard/notebooks`: returns list of notebooks
 
 ### Notebooks
@@ -17,12 +17,10 @@ TODO:
 
 - `./notebooks/notebook.py`
     - `GET /notebook/load/{notebookId}`: returns list of documents and chats
-
-TODO:
-- `/notebook/create`: create new notebook
+    - `POST /notebook/create`: create new notebook
 
 ### Chats
 TODO:
 - `/chat/create`: create new chat
-- `/chat/send`: send a message
-- `/chat/`: retrieve chat history
+- `/chat/message/send/{chatId}`: send a message
+- `/chat/message/history/{chatId}`: retrieve chat history

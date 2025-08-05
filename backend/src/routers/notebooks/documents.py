@@ -6,7 +6,7 @@ from typing import Optional
 
 from uuid import UUID
 from components.authentication.access_token import verifyJWT
-from database.notebooks import fetch_owner
+from backend.src.database.notebook.notebook import fetch_owner
 from components.files.pdf import save_pdf
 from core.config import Settings
 

@@ -6,7 +6,6 @@ from fastapi.security import OAuth2PasswordBearer
 from utils.dependencies import DBCxn
 from core.config import Settings
 from schema.authentication import JWTPayload
-from backend.src.database import notebooks
 from components.authentication.access_token import verifyJWT
 from jwt import PyJWTError
 

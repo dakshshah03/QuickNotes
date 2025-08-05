@@ -3,10 +3,12 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 
+from uuid import UUID
+
 from utils.dependencies import DBCxn
 from core.config import Settings
+from database.chats.chat import insert_chat, chatMetadata
 from schema.authentication import JWTPayload
-from backend.src.database import notebooks
 from components.authentication.access_token import verifyJWT
 from jwt import PyJWTError
 
@@ -17,9 +19,10 @@ router = APIRouter(prefix="/chat", tags=["chat CRUD"])
 async def create_chat(
         conn: DBCxn,
         chat_name: str = Form(...),
+        notebook_id: UUID = Form(...),
         token: str = Depends(oauth2_scheme)
     ):
-    new_chat = None
+    new_chat: chatMetadata = None
     try:
         payload = verifyJWT(token)
         user_id = payload.get("user_id")
@@ -29,9 +32,12 @@ async def create_chat(
                 status_code=401,
                 detail="Invalid token payload"
             )
-            
-        # TODO: create chat model, send info like chat name and notebook id
-        # TODO: call insert_chat function in database
+        
+        new_chat = chatMetadata(
+            parent_notebook=notebook_id,
+            name=chat_name
+        )
+        new_chat = insert_chat(conn, new_chat)
         
     except HTTPException:
         raise
