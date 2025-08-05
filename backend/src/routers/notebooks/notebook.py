@@ -19,42 +19,13 @@ from database.notebook.chats import get_chat_list
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 router = APIRouter(prefix="/notebook", tags=["notebook"])
 
-# load blank chat (loads current notebook after authenticating JWT)
-# returns list of chats and documents in a given chat
-# only called once per page reload or when new chat is made
-@router.get("/load/{notebookId}")
-async def load_notebook(
-        conn: DBCxn,
-        notebookId: UUID,
-        token: str = Depends(oauth2_scheme)
-    ):
-    payload = verifyJWT(token)
-    user_id = payload.get("user_id")
-    notebook_owner = fetch_owner(conn, notebookId)
-    
-    if user_id != notebook_owner:
-        raise HTTPException(
-            status_code=403,
-            detail=f"User {user_id} does not have access to resource."
-        )
-    
-    # call function loading documents
-    docs = get_document_list(conn, notebookId)
-    # call function loading chats in notebook
-    chats = get_chat_list(conn, notebookId)
-    
-    return {
-        "documents": docs,
-        "chats": chats
-    }
-
 @router.post("/create")
 async def create_notebook(
         conn: DBCxn,
         token: str = Depends(oauth2_scheme),
         notebook_name: str = Form(...)
     ):
-    new_notebook = None
+    new_notebook: notebook = None
     try:
         payload = verifyJWT(token)
         user_id = payload.get("user_id")
@@ -88,3 +59,38 @@ async def create_notebook(
             status_code=201,
             content=new_notebook.model_dump_json()
         )
+    
+@router.get("/load/{notebookId}")
+async def load_notebook(
+        conn: DBCxn,
+        notebookId: UUID,
+        token: str = Depends(oauth2_scheme)
+    ):
+    payload = verifyJWT(token)
+    user_id = payload.get("user_id")
+    notebook_owner = fetch_owner(conn, notebookId)
+    
+    if user_id != notebook_owner:
+        raise HTTPException(
+            status_code=403,
+            detail=f"User {user_id} does not have access to resource."
+        )
+    
+    # call function loading documents
+    docs = get_document_list(conn, notebookId)
+    # call function loading chats in notebook
+    chats = get_chat_list(conn, notebookId)
+    
+    return {
+        "documents": docs,
+        "chats": chats
+    }
+
+# rename notebook, edit description
+@router.patch("/edit")
+async def edit_notebook():
+    pass
+
+@router.delete("/delete")
+async def delete_notebook():
+    pass

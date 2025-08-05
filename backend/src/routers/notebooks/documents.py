@@ -11,7 +11,7 @@ from components.files.pdf import save_pdf
 from core.config import Settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
-router = APIRouter(prefix="/notebook", tags=["Chat PDF"])
+router = APIRouter(prefix="/notebook", tags=["notebook PDF"])
 UPLOAD_DIRECTORY = Settings.pdf_storage_dir
 # TODO: When new pdf uploaded, chunk pdf and add to vector store
 
