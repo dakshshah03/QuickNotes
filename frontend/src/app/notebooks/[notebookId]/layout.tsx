@@ -4,11 +4,11 @@
 
 'use client';
 import React, { useState, useEffect } from 'react';
-import { NotebookSidebar } from "@/components/notebookSideBar";
+import { NotebookSidebar } from "@/components/notebook/notebookSideBar";
 import EmptyChatBox from "@/components/newChatBox";
 import { useRouter, useParams } from "next/navigation";
 
-async function NotebookLayout({
+function NotebookLayout({
     children,
     params
 }: {
@@ -44,7 +44,10 @@ async function NotebookLayout({
                 />
             </div>
             <div className="flex-1">
-                <EmptyChatBox></EmptyChatBox>
+                {children}
+                <div className="">
+                    
+                </div>
             </div>
         </div>
     )

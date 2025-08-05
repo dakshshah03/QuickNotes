@@ -3,50 +3,12 @@
 // Once a message is sent in the blank chat, will create new chat and redirect user to that chat and load that chat
 
 'use client';
-import React, { useState, useEffect } from 'react';
-import { NotebookSidebar } from "@/components/notebookSideBar";
-import EmptyChatBox from "@/components/newChatBox";
-import { useRouter, useParams } from "next/navigation";
+import React from 'react';
+import EmptyChatBox from '@/components/newChatBox';
 
-interface NotebookPageProps {
-    params: Promise<{
-        notebookId: string
-    }>
-};
-
-async function NotebookPage({ params }: NotebookPageProps) {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [activeDocuments, setActive] = useState<Set<string>>(new Set());
-    const [message, setMessage] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const unwrappedParams = React.use(params);
-    const { notebookId } = unwrappedParams;
-
-    const router = useRouter();
-
+function NotebookPage() {
     return (
-        <div className={`
-                bg-gradient-to-t from-[#015a70] to-[#53003f]
-                h-[100vh]
-                w-[100vw]
-                flex
-            `}>
-            <div className='w-80 flex-shrink-0'>
-                <NotebookSidebar
-                    notebookId={notebookId}
-                    selectedFile={selectedFile}
-                    activeDocuments={activeDocuments}
-                    router={router}
-                    setActive={setActive}
-                    setMessage={setMessage}
-                    setIsLoading={setIsLoading}
-                    setSelectedFile={setSelectedFile}
-                />
-            </div>
-            <div className="flex-1">
-                <EmptyChatBox></EmptyChatBox>
-            </div>
-        </div>
+        <EmptyChatBox/>
     )
 };
 
