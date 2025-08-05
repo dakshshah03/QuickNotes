@@ -12,7 +12,7 @@ function NotebookSelector() {
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
-    const [showInput, setShowInput] = useState<boolean>(false); // State to toggle input visibility
+    const [showInput, setShowInput] = useState<boolean>(false);
     const router = useRouter();
 
     const fetchNotebookList = async () => {
@@ -24,8 +24,21 @@ function NotebookSelector() {
         );
     };
 
+    const handleCreateNotebook = async (notebookName: string) => {
+        try {
+            await createNotebook(router, notebookName, notebooks, setNotebooks, setIsLoading, setMessage);
+            setShowInput(false);
+            setName(''); 
+            router.push(`/notebooks/${notebooks[0].notebook_id}/`);
+        } catch (error) {
+            console.error('Failed to create notebook:', error);
+        }
+    };
+
     useEffect(() => {
-        if(name != '') createNotebook(router, name, notebooks, setNotebooks, setIsLoading, setMessage);
+        if(name !== '') {
+            handleCreateNotebook(name);
+        }
     }, [name]);
 
     useEffect(() => {
@@ -59,7 +72,7 @@ function NotebookSelector() {
                             key={nb.notebook_id}
                             onClick={() => router.push(`/notebooks/${nb.notebook_id}/`)}
                         >
-                            <NotebookTile key={nb.notebook_id} notebook_name={nb.notebook_name} updated_time={nb.updated_time}/>
+                            <NotebookTile notebook_name={nb.notebook_name} updated_time={nb.updated_time}/>
                         </button>
                     ))}
             </div>

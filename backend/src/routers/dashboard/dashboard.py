@@ -8,7 +8,7 @@ from jwt import PyJWTError
 from utils.dependencies import DBCxn
 from core.config import Settings
 from schema.authentication import JWTPayload
-from backend.src.database.notebook import notebook
+from database.notebook import notebook
 from components.authentication.access_token import verifyJWT
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")

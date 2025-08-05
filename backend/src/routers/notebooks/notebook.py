@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Depends, Form
+from fastapi import HTTPException, Depends, Form, status
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
@@ -19,7 +19,7 @@ from database.chats.chat import get_chat_list
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 router = APIRouter(prefix="/notebook", tags=["notebook"])
 
-@router.post("/create")
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 async def create_notebook(
         conn: DBCxn,
         token: str = Depends(oauth2_scheme),
@@ -55,10 +55,8 @@ async def create_notebook(
             status_code=500,
             detail=f"Internal server error: {e}"
         )
-    return JSONResponse(
-            status_code=201,
-            content=new_notebook.model_dump_json()
-        )
+    
+    return new_notebook
     
 @router.get("/load/{notebookId}")
 async def load_notebook(
