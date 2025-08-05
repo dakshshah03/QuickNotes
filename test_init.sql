@@ -58,4 +58,10 @@ SELECT 'Notebooks inserted:' as info, COUNT(*) as count FROM notebooks;
 SELECT * FROM users;
 SELECT * FROM notebooks;
 
+-- Insert dummy chats for parent_notebook '13e06d33-1ade-4022-8ff7-94d33441c697'
+INSERT INTO chats (chat_id, parent_notebook, chat_name) VALUES
+    (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'First Chat'),
+    (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'Second Chat'),
+    (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'Project Discussion');
+
 

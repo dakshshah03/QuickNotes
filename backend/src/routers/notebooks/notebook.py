@@ -65,9 +65,9 @@ async def load_notebook(
         token: str = Depends(oauth2_scheme)
     ):
     payload = verifyJWT(token)
-    user_id = payload.get("user_id")
+    user_id = UUID(payload.get("user_id"))
     notebook_owner = fetch_owner(conn, notebookId)
-    
+    print(notebook_owner, user_id)
     if user_id != notebook_owner:
         raise HTTPException(
             status_code=403,

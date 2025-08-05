@@ -7,8 +7,8 @@ from datetime import datetime
 class chatMetadata(BaseModel):
     id: Optional[UUID] = None
     parent_notebook: UUID
-    name: Optional[UUID] = None
-    updated_time: Optional[datetime] = None
+    name: Optional[str] = None
+    updated_time: Optional[str] = None
     
 def insert_chat(conn: psycopg.Connection, chat: chatMetadata) -> chatMetadata:
     """_summary_
@@ -37,8 +37,8 @@ def insert_chat(conn: psycopg.Connection, chat: chatMetadata) -> chatMetadata:
             chat_id, updated_time = result[0], result[1].isoformat()
             new_chat = chatMetadata(
                 id=chat_id,
-                name=chat.name,
                 parent_notebook=chat.parent_notebook,
+                name=chat.name,
                 updated_time=updated_time
             )
     except psycopg.Error as e:
@@ -66,7 +66,7 @@ def get_chat_list(conn: psycopg.Connection, notebook_id: UUID) -> List[chatMetad
         List[chatMetadata]: lsit of chats and their metadata
     """
     cursor = None
-    chats = []
+    chats: chatMetadata = []
     
     try:
         cursor = conn.cursor()
@@ -79,15 +79,16 @@ def get_chat_list(conn: psycopg.Connection, notebook_id: UUID) -> List[chatMetad
         
         rows = cursor.fetchall()
         for row in rows:
-            doc_id, doc_name, creation_time = row[0], row[1], row[2].isoformat()
+            chat_id, parent_notebook, chat_name, updated_time = row[0], row[1], row[2], row[3].isoformat()
             
-            notebook_item = chatMetadata(
-               id=doc_id,
-               name=doc_name,
-               creation_time=creation_time
+            chat_item = chatMetadata(
+               id=chat_id,
+               parent_notebook=parent_notebook,
+               name=chat_name,
+               updated_time=updated_time
             )
             
-            chats.append(notebook_item)
+            chats.append(chat_item)
         print(f"Successfully retrieved notebook")
         
     except psycopg.Error as e:

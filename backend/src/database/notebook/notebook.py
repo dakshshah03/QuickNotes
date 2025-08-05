@@ -14,9 +14,6 @@ class notebook(BaseModel):
     storage_dir: Optional[str] = None
     updated_time: Optional[str] = None
 
-class notebookList(BaseModel):
-    notebooks: List[notebook]
-
 def insert_notebook(conn: psycopg.Connection, nb: notebook) -> notebook:
     """
     inserts a new notebook entry in the DB
@@ -60,7 +57,7 @@ def insert_notebook(conn: psycopg.Connection, nb: notebook) -> notebook:
     
     return new_notebook
 
-def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
+def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID) -> List[notebook]:
     """
     Fetches a list of notebooks to be displayed on dashboard
 
@@ -73,9 +70,7 @@ def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
         psycopg.Error: Database connection or query error
     """
     cursor = None
-    notebook_list = notebookList(
-        notebooks = []
-    )
+    notebook_list: List[notebook] = []
     
     try:
         cursor = conn.cursor()
@@ -97,8 +92,8 @@ def fetch_notebook_list(conn: psycopg.Connection, notebook_owner: UUID):
                 updated_time=updated_time
             )
             
-            notebook_list.notebooks.append(notebook_item)
-        print(f"Successfully retrieved {len(notebook_list.notebooks)} notebooks")
+            notebook_list.append(notebook_item)
+        print(f"Successfully retrieved {len(notebook_list)} notebooks")
     except psycopg.Error as e:
         print(f"Error retrieving notebooks for {notebook_owner}: {e}")
         raise HTTPException(

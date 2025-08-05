@@ -16,7 +16,7 @@ function NotebookSelector() {
     const router = useRouter();
 
     const fetchNotebookList = async () => {
-        const data = await loadNotebookList(
+        await loadNotebookList(
             router,
             setNotebooks,
             setIsLoading,

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { uploadPDF } from '@/api/pdf';
+import { uploadPDF } from '@/api/document';
 
 const UploadPDFButton = ({ router, notebookId, selectedFile, setSelectedFile }: {
     router: AppRouterInstance,

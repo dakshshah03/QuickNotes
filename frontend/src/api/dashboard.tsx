@@ -8,10 +8,6 @@ interface notebook {
     notebook_id: string;
 }
 
-interface NotebookList {
-    notebooks: notebook[]; // Define proper notebook type
-}
-
 export const loadNotebookList = async (
     router: AppRouterInstance,
     setNotebooks: (notebooks: notebook[]) => void,
@@ -45,10 +41,10 @@ export const loadNotebookList = async (
             throw new Error(`HTTP error: ${response.status}`);
         }
 
+        const data: notebook[] = await response.json();
+        setNotebooks(data);
         console.log("Dashboard Loaded");
 
-        const data: NotebookList = await response.json();
-        setNotebooks(data.notebooks)
         return data;
     } catch (error) {
         console.error('Error loading notebooks:', error);

@@ -2,6 +2,22 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { getAccessToken } from '@/utils/accessToken';
 import { notebook } from './dashboard';
 
+interface chatItem {
+    id: string;
+    parent_notebook: string;
+    name: string;
+    updated_time: string;
+}
+
+interface document {
+    id: string;
+}
+
+interface loadResponse {
+    chats: chatItem[];
+    documents: null;
+}
+
 export const createNotebook = async (
     router: AppRouterInstance,
     notebookName: string,
@@ -42,3 +58,41 @@ export const createNotebook = async (
     }
 };
 
+export const loadChatList = async (
+    router: AppRouterInstance,
+    notebookId: string,
+    setChats: (chats: chatItem[]) => void,
+    setIsLoading: (isLoading: boolean) => void,
+    setMessage: (message: string) => void
+) => {
+    try {
+        const accessToken = getAccessToken();
+
+        const response = await fetch(`http://localhost:8000/notebook/load/${notebookId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.status === 401) {
+            router.push('/auth/login');
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+
+        const data: loadResponse = await response.json();
+        setChats(data.chats);
+        console.log("chats loaded");
+
+        return data;
+    } catch (error) {
+        console.error('Error loading notebooks:', error);
+        throw error;
+    }
+};
+export {type chatItem}
