@@ -3,25 +3,26 @@
 // constructs tiles in sidebar
 // collapsible
 import React, { useState, useEffect } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 import { ChatTile, UploadPDFButton } from './sidebarButtons';
 import { uploadPDF } from '@/api/document';
 import { chatItem, documentItem, loadSidebar } from '@/api/notebooks';
-// create map that creates chat tiles
-// create wrapper div that has new chat button, expands on hover, and toggle expand buttons
+import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
 
-const NotebookSidebar = ({ notebookId, setIsLoading, setMessage, activeDocuments, setActive, selectedFile, setSelectedFile, router } : {
-    notebookId: string,
-    selectedFile: File | null,
-    activeDocuments: Set<string>,
-    router: AppRouterInstance,
-    setActive: React.Dispatch<React.SetStateAction<Set<string>>>,
-    setMessage: (message: string) => void,
-    setIsLoading: (loading: boolean) => void,
-    setSelectedFile: (selectedFile: File | null) => void
-}) => {
+const NotebookSidebar = () => {
+    const {
+        notebookId,
+        selectedFile,
+        setSelectedFile,
+        activeDocuments,
+        setActive,
+        setMessage,
+        setIsLoading
+    } = useNotebookContext();
+    
     const [chats, setChats] = useState<chatItem[]>([]);
     const [documents, setDocuments] = useState<documentItem[]>([]);
+    const router = useRouter();
 
     const fetchSidebar = async () => {
         await loadSidebar(
@@ -55,12 +56,7 @@ const NotebookSidebar = ({ notebookId, setIsLoading, setMessage, activeDocuments
                     flex-shrink-0
                     p-[20px]
                 ">
-                    <UploadPDFButton 
-                        router={router}
-                        notebookId={notebookId}
-                        selectedFile={selectedFile}
-                        setSelectedFile={setSelectedFile}
-                    />
+                    <UploadPDFButton />
             </div>
             <div className="ml-10 mr-10 border-b border-[#ffffff6c]"/>
             <div className="

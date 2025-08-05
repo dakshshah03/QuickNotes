@@ -3,12 +3,31 @@
 // Once a message is sent in the blank chat, will create new chat and redirect user to that chat and load that chat
 
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { NotebookSidebar } from "@/components/notebook/notebookSideBar";
-import EmptyChatBox from "@/components/newChatBox";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-function NotebookLayout({
+const NotebookContext = createContext<{
+    selectedFile: File | null;
+    setSelectedFile: (file: File | null) => void;
+    activeDocuments: Set<string>;
+    setActive: (docs: Set<string>) => void;
+    message: string;
+    setMessage: (msg: string) => void;
+    isLoading: boolean;
+    setIsLoading: (loading: boolean) => void;
+    notebookId: string;
+} | null>(null);
+
+export const useNotebookContext = () => {
+    const context = useContext(NotebookContext);
+    if (!context) {
+        throw new Error('useNotebookContext must be used within a NotebookContext.Provider');
+    }
+    return context;
+};
+
+export default function NotebookLayout({
     children,
     params
 }: {
@@ -25,32 +44,30 @@ function NotebookLayout({
     const router = useRouter();
 
     return (
-        <div className={`
-                bg-gradient-to-t from-[#015a70] to-[#53003f]
-                h-[100vh]
-                w-[100vw]
-                flex
-            `}>
-            <div className='w-80 flex-shrink-0'>
-                <NotebookSidebar
-                    notebookId={notebookId}
-                    selectedFile={selectedFile}
-                    activeDocuments={activeDocuments}
-                    router={router}
-                    setActive={setActive}
-                    setMessage={setMessage}
-                    setIsLoading={setIsLoading}
-                    setSelectedFile={setSelectedFile}
-                />
-            </div>
-            <div className="flex-1">
-                {children}
-                <div className="">
-                    
+        <NotebookContext.Provider value={{
+            selectedFile,
+            setSelectedFile,
+            activeDocuments,
+            setActive,
+            message,
+            setMessage,
+            isLoading,
+            setIsLoading,
+            notebookId
+        }}>
+            <div className={`
+                    bg-gradient-to-t from-[#015a70] to-[#53003f]
+                    h-[100vh]
+                    w-[100vw]
+                    flex
+                `}>
+                <div className='w-80 flex-shrink-0'>
+                    <NotebookSidebar/>
+                </div>
+                <div className="flex-1">
+                    {children}
                 </div>
             </div>
-        </div>
+        </NotebookContext.Provider>
     )
 };
-
-export default NotebookLayout;

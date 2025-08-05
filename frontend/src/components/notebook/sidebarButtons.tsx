@@ -1,13 +1,11 @@
 import React, { useRef, useEffect } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 import { uploadPDF } from '@/api/document';
+import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
 
-export const UploadPDFButton = ({ router, notebookId, selectedFile, setSelectedFile }: {
-    router: AppRouterInstance,
-    notebookId: string,
-    selectedFile: File | null,
-    setSelectedFile: (selectedFile: File | null) => void,
-}) => {
+export const UploadPDFButton = () => {
+    const { notebookId, selectedFile, setSelectedFile } = useNotebookContext();
+    const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
