@@ -11,12 +11,13 @@ const NotebookContext = createContext<{
     selectedFile: File | null;
     setSelectedFile: (file: File | null) => void;
     activeDocuments: Set<string>;
-    setActive: (docs: Set<string>) => void;
     message: string;
     setMessage: (msg: string) => void;
     isLoading: boolean;
     setIsLoading: (loading: boolean) => void;
     notebookId: string;
+    chatMessage: string;
+    setChatMessage: (cmsg: string) => void;
 } | null>(null);
 
 export const useNotebookContext = () => {
@@ -35,12 +36,12 @@ export default function NotebookLayout({
     params: Promise<{notebookId: string}>
 }) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [activeDocuments, setActive] = useState<Set<string>>(new Set());
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const unwrappedParams = React.use(params);
     const { notebookId } = unwrappedParams;
-
+    const [chatMessage, setChatMessage] = useState<string>('');
+    const activeDocuments: Set<string> = new Set();
     const router = useRouter();
 
     return (
@@ -48,12 +49,13 @@ export default function NotebookLayout({
             selectedFile,
             setSelectedFile,
             activeDocuments,
-            setActive,
             message,
             setMessage,
             isLoading,
             setIsLoading,
-            notebookId
+            notebookId,
+            chatMessage,
+            setChatMessage
         }}>
             <div className={`
                     bg-gradient-to-t from-[#015a70] to-[#53003f]

@@ -1,11 +1,13 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { getAccessToken } from '@/utils/accessToken';
-import { metadata } from '@/app/layout';
+import { documentItem } from './notebooks';
 
 export const uploadPDF = async (
     router: AppRouterInstance,
     notebookId: string,
     selectedFile: File,
+    documents: documentItem[],
+    setDocuments: (documents: documentItem[]) => void
 ) => {
     try {
         const accessToken = getAccessToken();
@@ -25,8 +27,10 @@ export const uploadPDF = async (
             return;
         }
 
-        console.log(response.status);
         // TODO: handle errors
+
+        const data: documentItem = await response.json();
+        setDocuments([data, ...documents]);
     } catch (error) {
         console.error('Error uploading file:', error);
         throw error;

@@ -2,9 +2,12 @@ import React, { useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { uploadPDF } from '@/api/document';
 import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
+import { documentItem } from '@/api/notebooks';
+import { useSidebarContext } from './notebookSideBar';
 
 export const UploadPDFButton = () => {
     const { notebookId, selectedFile, setSelectedFile } = useNotebookContext();
+    const {documents, setDocuments} = useSidebarContext();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -18,7 +21,7 @@ export const UploadPDFButton = () => {
 
     useEffect(() => {
         if (selectedFile) {
-            uploadPDF(router, notebookId, selectedFile);
+            uploadPDF(router, notebookId, selectedFile, documents, setDocuments);
         }
     }, [selectedFile, notebookId]);
 
@@ -54,13 +57,14 @@ export const UploadPDFButton = () => {
     )
 };
 
-export const DocumentTIle = ( { documentName } : { documentName: string}) => {
+export const DocumentTile = ({ doc_id, documentName, isActive } : { doc_id: string, documentName: string, isActive: boolean }) => {
     return (
         <div className={`
                 h-[50px]
                 pl-[20px]
                 pr-[20px]
-                hover:rounded-full
+                ${!isActive ? 'text-[#ffffff8f] ': ''}
+                rounded-full
                 hover:bg-[#72727242]
                 hover:translate-y-[-3px]
                 hover:shadow-xl/50

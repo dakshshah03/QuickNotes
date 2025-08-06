@@ -1,4 +1,4 @@
-from fastapi import HTTPException, UploadFile, File, Form
+from fastapi import HTTPException, UploadFile, File, Form, status
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import OAuth2PasswordBearer
 from utils.dependencies import DBCxn
@@ -16,7 +16,7 @@ UPLOAD_DIRECTORY = Settings.pdf_storage_dir
 # TODO: When new pdf uploaded, chunk pdf and add to vector store
 
 
-@router.post("/document/upload")
+@router.post("/document/upload", status_code=status.HTTP_201_CREATED)
 async def upload_pdf(
         conn: DBCxn, 
         token: str = Depends(oauth2_scheme),

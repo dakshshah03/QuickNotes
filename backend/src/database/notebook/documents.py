@@ -33,9 +33,9 @@ def create_document(conn: psycopg.Connection, doc: document) -> document:
         
         result = cursor.fetchone()
         if result:
-            chat_id, creation_time = result[0], result[1].isoformat()
+            doc_id, creation_time = result[0], result[1].isoformat()
             new_document = document(
-                chat_id=chat_id,
+                id=doc_id,
                 name=doc.name,
                 parent_notebook=doc.parent_notebook,
                 creation_time=creation_time
@@ -78,9 +78,10 @@ def get_document_list(conn: psycopg.Connection, notebook_id: UUID) -> List[docum
         for row in rows:
             doc_id, doc_name, creation_time = row[0], row[1], row[2].isoformat()
             notebook_item = document(
-               id=doc_id,
-               name=doc_name,
-               creation_time=creation_time
+                id=doc_id,
+                name=doc_name,
+                parent_notebook=notebook_id,
+                creation_time=creation_time
             )
             documents.append(notebook_item)
         print(f"Successfully retrieved notebook")

@@ -92,6 +92,8 @@ export const loadSidebar = async (
         const data: loadResponse = await response.json();
         setChats(data.chats);
         console.log("chats loaded");
+        setDocuments(data.documents);
+        console.log("documents loaded");
 
         return data;
     } catch (error) {
