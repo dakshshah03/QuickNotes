@@ -83,6 +83,7 @@ export const loadMessageHistory = async (
 
         const data: messageItem[] = await response.json();
         setMessageHistory(data);
+        console.log("Loaded message history");
     } catch (error) {
         console.error('Error loading message history:', error);
         throw error;

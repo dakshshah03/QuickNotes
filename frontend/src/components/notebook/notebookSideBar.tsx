@@ -28,12 +28,13 @@ const NotebookSidebar = () => {
         selectedFile,
         setSelectedFile,
         setMessage,
-        setIsLoading
+        setIsLoading,
+        activeDocuments,
+        setActiveDocIds
     } = useNotebookContext();
     
     const [chats, setChats] = useState<chatItem[]>([]);
     const [documents, setDocuments] = useState<documentItem[]>([]);
-    const [activeDocuments, setActiveDocIds] = useState<Set<string>>(new Set());
     const router = useRouter();
 
     const fetchSidebar = async () => {

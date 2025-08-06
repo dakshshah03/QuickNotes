@@ -11,6 +11,7 @@ const NotebookContext = createContext<{
     selectedFile: File | null;
     setSelectedFile: (file: File | null) => void;
     activeDocuments: Set<string>;
+    setActiveDocIds: (docIds: Set<string>) => void;
     message: string;
     setMessage: (msg: string) => void;
     isLoading: boolean;
@@ -41,7 +42,7 @@ export default function NotebookLayout({
     const unwrappedParams = React.use(params);
     const { notebookId } = unwrappedParams;
     const [chatMessage, setChatMessage] = useState<string>('');
-    const activeDocuments: Set<string> = new Set();
+    const [activeDocuments, setActiveDocIds] = useState<Set<string>>(new Set());
     const router = useRouter();
 
     return (
@@ -49,6 +50,7 @@ export default function NotebookLayout({
             selectedFile,
             setSelectedFile,
             activeDocuments,
+            setActiveDocIds,
             message,
             setMessage,
             isLoading,

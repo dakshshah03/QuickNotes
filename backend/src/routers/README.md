@@ -20,7 +20,8 @@ TODO:
     - `POST /notebook/create`: create new notebook
 
 ### Chats
+- `./chats/messages.py`
+    - `POST /chat/send/`: send a message`
+    - `GET /chat/history/${notebookId}/${chatId}`: retrieve chat history
 TODO:
 - `/chat/create`: create new chat
-- `/chat/send/`: send a message
-- `/chat/history/${notebookId}/${chatId}`: retrieve chat history

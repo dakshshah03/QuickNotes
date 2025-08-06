@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { sendMessage, loadMessageHistory, messageItem } from '@/api/chat';
 import { useChatContext } from '@/app/notebooks/[notebookId]/[chatId]/page';
 import { useRouter } from 'next/navigation';
+import { useSidebarContext } from '../notebook/notebookSideBar';
+import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
 
 export const WriteMessage = () => {
     const {
@@ -14,8 +16,11 @@ export const WriteMessage = () => {
         setIsLoading,
         setMessage
     } = useChatContext();
+    const {
+        activeDocuments,
+        setActiveDocIds,
+    } = useNotebookContext();
     const router = useRouter();
-
     const [inputValue, setInputValue] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -68,15 +73,21 @@ export const WriteMessage = () => {
                 flex-shrink-0
                 ml-auto
                 rounded-r-3xl
-                bg-[#50505065]
+                bg-[#00000048]
                 flex
                 items-center
                 justify-center
             ">
                 <button
                     type="submit"
-                    className="w-full h-full text-white font-bold rounded-r-3xl"
-                >
+                    className="
+                    w-full
+                    h-full
+                    text-white
+                    font-bold
+                    rounded-r-3xl
+                    hover:bg-[#b6b6b681]
+                ">
                     Send
                 </button>
             </div>
