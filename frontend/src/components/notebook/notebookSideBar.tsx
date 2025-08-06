@@ -4,7 +4,7 @@
 // collapsible
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChatTile, UploadPDFButton, DocumentTile } from './sidebarButtons';
+import { ChatTile, UploadPDFButton, DocumentTile, CreateChatButton } from './sidebarButtons';
 import { uploadPDF } from '@/api/document';
 import { chatItem, documentItem, loadSidebar } from '@/api/notebooks';
 import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
@@ -83,7 +83,7 @@ const NotebookSidebar = () => {
                     flex-shrink-0
                     p-[20px]
                 ">
-                    
+                    <CreateChatButton/>
                 </div>
                 <div className="ml-10 mr-10 border-b border-[#ffffff6c]"/>
                 <div className="

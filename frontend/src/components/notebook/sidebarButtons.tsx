@@ -2,8 +2,37 @@ import React, { useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { uploadPDF } from '@/api/document';
 import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
-import { documentItem } from '@/api/notebooks';
 import { useSidebarContext } from './notebookSideBar';
+
+
+export const CreateChatButton = () => {
+    const router = useRouter();
+    const { notebookId } = useNotebookContext();
+
+    return (
+        <form className={`
+            grid min-w-full
+            h-[50px]
+            rounded-full
+            bg-[#5252527a]
+            hover:bg-[#b6b6b681]
+            hover:translate-y-[-3px]
+            hover:shadow-xl/50
+            text-left
+            truncate
+        `}>
+            <button
+                type="button"
+                onClick={() => {
+                    router.push(`/notebooks/${notebookId}`);
+                }}
+            >
+                New Chat
+            </button>
+        </form>
+    )
+};
+
 
 export const UploadPDFButton = () => {
     const { notebookId, selectedFile, setSelectedFile } = useNotebookContext();
@@ -30,8 +59,8 @@ export const UploadPDFButton = () => {
             grid min-w-full
             h-[50px]
             rounded-full
-            bg-[#4729297a]
-            hover:bg-[#693c3c42]
+            bg-[#5252527a]
+            hover:bg-[#b6b6b681]
             hover:translate-y-[-3px]
             hover:shadow-xl/50
             text-left
@@ -72,6 +101,7 @@ export const DocumentTile = ({ doc_id, documentName, isActive } : { doc_id: stri
                 flex
                 items-center
                 truncate
+                w-full
             `}>
             <span className="truncate">
                 {documentName}
