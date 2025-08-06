@@ -4,7 +4,7 @@
 
 'use client';
 import React from 'react';
-import EmptyChatBox from '@/components/chat/newChatBox';
+import EmptyChatBox from '@/components/chat/newChatWindow';
 import { WriteMessage } from '@/components/chat/messageBox';
 
 function NotebookPage() {

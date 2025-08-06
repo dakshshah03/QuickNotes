@@ -22,5 +22,5 @@ TODO:
 ### Chats
 TODO:
 - `/chat/create`: create new chat
-- `/chat/message/send/{chatId}`: send a message
-- `/chat/message/history/{chatId}`: retrieve chat history
+- `/chat/send/`: send a message
+- `/chat/history/${notebookId}/${chatId}`: retrieve chat history
