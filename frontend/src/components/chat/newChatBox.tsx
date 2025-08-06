@@ -12,11 +12,8 @@ const EmptyChatBox = () => {
                 <span className={`
                     text-[50px]
                 `}>
-                    Ask Away
+                    Start Conversation
                 </span>
-            </div>
-            <div className="flex-shrink-0">
-                chat entry box
             </div>
         </div>
     )

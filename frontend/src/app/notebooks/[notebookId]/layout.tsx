@@ -58,12 +58,12 @@ export default function NotebookLayout({
             setChatMessage
         }}>
             <div className={`
-                    bg-gradient-to-t from-[#015a70] to-[#53003f]
-                    h-[100vh]
-                    w-[100vw]
-                    flex
-                `}>
-                <div className='w-80 flex-shrink-0'>
+                bg-gradient-to-t from-[#015a70] to-[#53003f]
+                h-[100vh]
+                w-[100vw]
+                flex
+            `}>
+                <div className="w-80 flex-shrink-0 hidden lg:block">
                     <NotebookSidebar/>
                 </div>
                 <div className="flex-1">

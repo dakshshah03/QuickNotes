@@ -4,11 +4,21 @@
 
 'use client';
 import React from 'react';
-import EmptyChatBox from '@/components/newChatBox';
+import EmptyChatBox from '@/components/chat/newChatBox';
+import { WriteMessage } from '@/components/chat/messageBox';
 
 function NotebookPage() {
     return (
-        <EmptyChatBox/>
+        <div>
+            <div className="flex flex-col h-screen">
+                <EmptyChatBox/>
+                <div className="flex-4">
+                </div>
+                <div className="flex-shrink-0 flex justify-center">
+                    <WriteMessage/>
+                </div>
+            </div>
+        </div>
     )
 };
 
