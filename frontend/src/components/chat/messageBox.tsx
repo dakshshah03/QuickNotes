@@ -8,7 +8,6 @@ export const WriteMessage = () => {
             min-w-[360px]
             w-4/5
             lg:w-3/5
-            h-[150px]
             mb-[40px]
             rounded-3xl
         ">
@@ -27,6 +26,7 @@ export const WriteMessage = () => {
                 "
                 placeholder="Type your message..."
                 rows={1}
+                style={{ minHeight: '100px', maxHeight: '120px' }}
             />
             <div className="
                 w-[120px]

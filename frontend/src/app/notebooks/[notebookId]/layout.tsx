@@ -57,8 +57,9 @@ export default function NotebookLayout({
             chatMessage,
             setChatMessage
         }}>
+            {/* bg-gradient-to-t from-[#015a70] to-[#53003f] */}
             <div className={`
-                bg-gradient-to-t from-[#015a70] to-[#53003f]
+                bg-gradient-to-t from-[#232627] to-[#242424]
                 h-[100vh]
                 w-[100vw]
                 flex
