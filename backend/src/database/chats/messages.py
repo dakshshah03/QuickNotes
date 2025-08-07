@@ -1,13 +1,9 @@
 from pydantic import BaseModel
 from fastapi import HTTPException
-
 from typing import List, Optional, Dict, Set
-from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 import psycopg
-
-from database.vectordb import vector_db_instance
 
 class messageMetadata(BaseModel):
     message_id: Optional[UUID] = None

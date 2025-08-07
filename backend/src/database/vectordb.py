@@ -33,7 +33,6 @@ class VectorDB:
             embed_dim=384
         )
         self.doc_index = VectorStoreIndex.from_vector_store(vector_store=self.doc_vector_store)
-        self.doc_query_engine = self.doc_index.as_query_engine()
         
         # vector store for previous chat QA
         self.chat_vector_store = PGVectorStore.from_params(
@@ -46,22 +45,22 @@ class VectorDB:
             embed_dim=384
         )
         self.chat_index = VectorStoreIndex.from_vector_store(vector_store=self.chat_vector_store)
-        self.chat_query_engine = self.chat_index.as_query_engine()
         
-    def insert_document(self, parsed_pdf: str, documentMetadata: Dict) -> None:
-        document = Document(text=parsed_pdf, metadata=documentMetadata)
-        self.doc_index.add_documents([document])
+    def store_document(self, chunked_pdf: List[Document]) -> None:
+        self.doc_index.add_documents([chunked_pdf])
 
-    def insert_chat_message(self, message_text: str, chatMetadata: Dict) -> None:
-        message = Document(text=message_text, metadata=chatMetadata)
-        self.chat_index.add_documents([message])
+    # def store_chat_message(self, message_text: str, chatMetadata: Dict) -> None:
+    #     message = Document(text=message_text, metadata=chatMetadata)
+    #     self.chat_index.add_documents([message])
 
-    def query_documents_by_metadata(self, metadata_filter: Dict) -> List[Document]:
-        results = self.doc_index.query(filters=metadata_filter)
-        return results
+    def retrieve_documents_by_similarity(self, query_text: str, top_k: int = 2, metadata_filter: Optional[Dict] = None) -> List[Document]:
+        retriever = self.doc_index.as_retriever(similarity_top_k=top_k, filters=metadata_filter)
+        results = retriever.retrieve(query_text)
+        return [node.node for node in results]
 
-    def query_chats_by_metadata(self, metadata_filter: Dict) -> List[Document]:
-        results = self.chat_index.query(filters=metadata_filter)
-        return results
+    # def retrieve_chats_by_similarity(self, query_text: str, top_k: int = 5, metadata_filter: Optional[Dict] = None) -> List[Document]:
+    #     retriever = self.chat_index.as_retriever(similarity_top_k=top_k, filters=metadata_filter)
+    #     results = retriever.retrieve(query_text)
+        # return [node.node for node in results]
 
 vector_db_instance = VectorDB()

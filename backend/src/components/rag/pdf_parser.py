@@ -2,6 +2,11 @@ from mistralai import Mistral
 from dotenv.main import load_dotenv
 import os
 import base64
+from typing import List, Dict
+from llama_index.core.node_parser import MarkdownNodeParser
+from llama_index.core import Document
+
+from database.vector_store.pdf import documentMetadata
 
 load_dotenv()
 
@@ -20,7 +25,7 @@ def encode_pdf(pdf_path: str) -> base64:
         return None
     
 
-def parse_document(pdf_path: str = None):
+def parse_document(pdf_path: str = None) -> List[Dict]:
     api_key = os.environ["MISTRAL_API_KEY"]
     client = Mistral(api_key=api_key)
     
@@ -35,4 +40,39 @@ def parse_document(pdf_path: str = None):
         include_image_base64=True
     )
     return ocr_response.pages # list of jsons with index, markdown, images, and dimensions
+
+def chunk_document(
+        parsed_text: str,
+        documentMetadata: documentMetadata,
+        chunk_size: int = 1000,
+        chunk_overlap: int = 200
+    ) -> List[Document]:
     
+    node_parser = MarkdownNodeParser.from_defaults(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap
+    )
+    
+    chunks: List[Document] = []
+    
+    if not parsed_text.strip():
+        return chunks
+    
+    doc = Document(
+        text=parsed_text,
+        metadata={}
+    )
+    
+    nodes = node_parser.get_nodes_from_documents([doc])
+    
+    for chunk_index, node in enumerate(nodes):
+        chunk_metadata = documentMetadata.model_copy()
+        chunk_metadata.chunk_index = str(chunk_index)
+        
+        chunk_doc = Document(
+            text=node.text,
+            metadata=chunk_metadata.model_dump()
+        )
+        chunks.append(chunk_doc)
+        
+    return chunks
