@@ -12,7 +12,7 @@ from components.authentication.access_token import verifyJWT
 
 from database.notebook.notebook import fetch_owner
 from database.chats.chat import fetch_chat_owner
-from database.chats.messages import fetch_message_history, messageMetadata
+from database.chats.messages import fetch_message_history, create_message, set_llm_response, messageMetadata
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
@@ -75,6 +75,20 @@ async def send_message(
     # TODO: embed messages in vector DB
     # TODO: query both vector tables for context
     
+    message = messageMetadata(
+        parent_chat=chatId,
+        user_prompt=userPrompt
+    )
+    new_message = create_message(conn, message)
+    
+    # TODO: create filter to only include active documents
+    
+    # TODO: query document_embeddings top 3, min similarity 0.8
+    # TODO: query message_embeddings top 2, min similarity 0.8
+    # TODO: construct prompt, query LLM
+    # TODO: take LLM response, store here 
+    llm_response = message.llm_response = ""
+    set_llm_response(conn, new_message.message_id, llm_response)
     pass
 
 @router.patch("/edit/{messageId}")

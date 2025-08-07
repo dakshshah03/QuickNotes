@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS message_history (
     message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     parent_chat UUID NOT NULL,
     user_prompt TEXT NOT NULL,
-    llm_response TEXT NOT NULL,
+    llm_response TEXT,
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
