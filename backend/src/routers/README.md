@@ -22,6 +22,6 @@ TODO:
 ### Chats
 - `./chats/messages.py`
     - `POST /chat/send/`: send a message`
-    - `GET /chat/history/${notebookId}/${chatId}`: retrieve chat history
+    - `GET /chat/history/{notebookId}/{chatId}`: retrieve chat history
 TODO:
 - `/chat/create`: create new chat

@@ -66,8 +66,8 @@ async def load_notebook(
     ):
     payload = verifyJWT(token)
     user_id = UUID(payload.get("user_id"))
+    
     notebook_owner = fetch_owner(conn, notebookId)
-    print(notebook_owner, user_id)
     if user_id != notebook_owner:
         raise HTTPException(
             status_code=403,

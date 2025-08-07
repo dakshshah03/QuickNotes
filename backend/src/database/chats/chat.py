@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 
+from utils.exceptions import ChatNotFoundError
+
 class chatMetadata(BaseModel):
     id: Optional[UUID] = None
     parent_notebook: UUID
@@ -99,3 +101,38 @@ def get_chat_list(conn: psycopg.Connection, notebook_id: UUID) -> List[chatMetad
             cursor.close()
     
     return chats
+
+def fetch_chat_owner(conn: psycopg.Connection, chat_id: UUID) -> UUID:
+    """
+    returns notebookId that owns a given chat
+    
+    Raises:
+        ChatNotFoundError: When chat with given ID is not found
+        psycopg.Error: Database connection or query error
+    """
+    cursor = None
+    chat_owner = None
+    try:
+        cursor = conn.cursor()
+        owner_query = """
+        SELECT parent_notebook
+        FROM chats
+        WHERE chat_id = %s;
+        """
+        
+        cursor.execute(owner_query, (chat_id,))
+        
+        row = cursor.fetchone()
+        
+        if row:
+            chat_owner = row[0]
+        else:
+            raise ChatNotFoundError(f"No chat found with id {chat_id}")
+        
+    except psycopg.Error as e:
+        print(f"Database error retrieving chat with ID {chat_id}: {e}")
+        raise
+    finally:
+        if cursor:
+            cursor.close()
+    return chat_owner

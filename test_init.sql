@@ -32,15 +32,23 @@ CREATE TABLE IF NOT EXISTS documents (
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS message_history (
+    message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    parent_chat UUID NOT NULL,
+    user_prompt TEXT NOT NULL,
+    llm_response TEXT NOT NULL,
+    creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS document_embeddings (
-    id UUID PRIMARY KEY, 
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     content TEXT,
-    metadata JSONB,
+    metadata JSONB, -- {}
     embedding VECTOR(384) -- 384 is for <all-MiniLM-L6-v2> model
 );
 
 CREATE TABLE IF NOT EXISTS message_embeddings (
-    id UUID PRIMARY KEY, 
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     content TEXT,
     metadata JSONB,
     embedding VECTOR(384)

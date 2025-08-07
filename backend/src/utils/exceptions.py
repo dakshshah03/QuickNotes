@@ -7,4 +7,7 @@ class NotebookNotFoundError(Exception):
         self.message = message
         super().__init__(self.message)
         
-        
+class ChatNotFoundError(Exception):
+     def __init__(self, message="Chat not found."):
+        self.message = message
+        super().__init__(self.message)

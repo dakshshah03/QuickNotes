@@ -20,9 +20,9 @@ export const sendMessage = async (
 ) => {
     const accessToken = getAccessToken();
     const formData = new FormData();
-    formData.append("notebook_id", messageMetadata.notebook_id);
-    formData.append("chat_id", messageMetadata.chat_id);
-    formData.append("user_prompt", messageMetadata.user_prompt);
+    formData.append("notebookId", messageMetadata.notebook_id);
+    formData.append("chatId", messageMetadata.chat_id);
+    formData.append("userPrompt", messageMetadata.user_prompt);
 
     try {
         const response = await fetch(`http://localhost:8000/chat/send/`, {
