@@ -56,7 +56,7 @@ const NotebookSidebar = () => {
     }, [documents]);
 
     const updateDocumentStatus = (doc_id: string) => {
-        setActiveDocIds(prev => {
+        setActiveDocIds((prev) => {
             const newSet = new Set(prev);
             if (newSet.has(doc_id)) {
                 newSet.delete(doc_id);

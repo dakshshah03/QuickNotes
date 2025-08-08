@@ -5,8 +5,9 @@ import base64
 from typing import List, Dict
 from llama_index.core.node_parser import MarkdownNodeParser
 from llama_index.core import Document
+from llama_index.core.schema import BaseNode
 
-from database.vector_store.pdf import documentMetadata
+from database.vector_store.documents import documentMetadata
 
 load_dotenv()
 
@@ -43,17 +44,12 @@ def parse_document(pdf_path: str = None) -> List[Dict]:
 
 def chunk_document(
         parsed_text: str,
-        documentMetadata: documentMetadata,
-        chunk_size: int = 1000,
-        chunk_overlap: int = 200
-    ) -> List[Document]:
+        metadata: documentMetadata
+    ) -> List[BaseNode]:
     
-    node_parser = MarkdownNodeParser.from_defaults(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap
-    )
+    node_parser = MarkdownNodeParser.from_defaults()
     
-    chunks: List[Document] = []
+    chunks: List[BaseNode] = []
     
     if not parsed_text.strip():
         return chunks
@@ -64,15 +60,11 @@ def chunk_document(
     )
     
     nodes = node_parser.get_nodes_from_documents([doc])
-    
     for chunk_index, node in enumerate(nodes):
-        chunk_metadata = documentMetadata.model_copy()
+        chunk_metadata = metadata.model_copy()
         chunk_metadata.chunk_index = str(chunk_index)
         
-        chunk_doc = Document(
-            text=node.text,
-            metadata=chunk_metadata.model_dump()
-        )
-        chunks.append(chunk_doc)
+        node.metadata = chunk_metadata.model_dump()
+        chunks.append(node)
         
     return chunks

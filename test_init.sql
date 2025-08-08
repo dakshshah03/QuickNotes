@@ -40,20 +40,6 @@ CREATE TABLE IF NOT EXISTS message_history (
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS document_embeddings (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    content TEXT,
-    metadata JSONB, -- {}
-    embedding VECTOR(384) -- 384 is for <all-MiniLM-L6-v2> model
-);
-
-CREATE TABLE IF NOT EXISTS message_embeddings (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    content TEXT,
-    metadata JSONB,
-    embedding VECTOR(384)
-);
-
 -- Begin transaction to ensure atomicity
 BEGIN;
 

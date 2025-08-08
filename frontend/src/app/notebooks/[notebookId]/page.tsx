@@ -14,7 +14,7 @@ function NotebookPage() {
             <div className="flex-4">
             </div>
             <div className="flex-shrink-0 flex justify-center">
-                <WriteMessage/>
+                {/* <WriteMessage/> */}
             </div>
         </div>
     )

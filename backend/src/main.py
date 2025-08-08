@@ -10,7 +10,6 @@ from typing import Annotated
 from routers.notebooks import documents
 from database.db import db_instance
 from components.rag.pdf_parser import parse_document
-from components.rag.vector_store import DocumentVectorDB
 from core.config import Settings
 
 # router imports
@@ -33,10 +32,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-vector_db_instance = DocumentVectorDB()
+# vector_db_instance = DocumentVectorDB()
 
-def get_vector_db() -> DocumentVectorDB:
-    return vector_db_instance
+# def get_vector_db() -> DocumentVectorDB:
+#     return vector_db_instance
 
 origins = [
         "http://localhost",
