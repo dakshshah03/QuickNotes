@@ -25,15 +25,18 @@ export const WriteMessage = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setUserPrompt(inputValue);
+        
+        if (!inputValue.trim()) return; 
+        
         const new_msg: messageItem = {
             'notebook_id': notebookId,
             'chat_id': chatId,
-            'user_prompt': userPrompt
+            'user_prompt': inputValue 
         };
+        
+        setUserPrompt(inputValue);
         setMessageHistory([...messageHistory, new_msg]);
-        sendMessage(router, new_msg, messageHistory, setMessageHistory, setIsLoading, setMessage);
-        console.log(userPrompt);
+        sendMessage(router, new_msg, messageHistory, activeDocuments, setMessageHistory, setIsLoading, setMessage);
         setInputValue('');
     };
 

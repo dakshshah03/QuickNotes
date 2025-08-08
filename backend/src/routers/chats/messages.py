@@ -2,6 +2,7 @@ from fastapi import HTTPException, Depends, Form
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
+import json
 
 from uuid import UUID
 from typing import Set, List
@@ -9,6 +10,8 @@ from typing import Set, List
 from utils.dependencies import DBCxn
 from core.config import Settings
 from components.authentication.access_token import verifyJWT
+from components.rag.message_context import retrieve_context
+from components.llm.openai import construct_prompt, query_llm
 
 from database.notebook.notebook import fetch_owner
 from database.chats.chat import fetch_chat_owner
@@ -53,43 +56,65 @@ async def load_chat_history(
 
 # send message, return LLM response
 # frontend will append this to list
-@router.put("/send")
+@router.post("/send")
 async def send_message(
         conn: DBCxn,
         notebookId: UUID = Form(...),
         chatId: UUID = Form(...),
         userPrompt: str = Form(...),
-        activeDocuments: Set = Form(...),
+        activeDocuments: str = Form(...),
         token: str = Depends(oauth2_scheme)
     ):
-    payload = verifyJWT(token)
-    user_id = UUID(payload.get("user_id"))
-    notebook_owner = fetch_owner(conn, notebookId)
-    
-    if user_id != notebook_owner:
-        raise HTTPException(
-            status_code=403,
-            detail=f"User {user_id} does not have access to resource."
+    try:
+        payload = verifyJWT(token)
+        user_id = UUID(payload.get("user_id"))
+        
+        active_documents_set = set(json.loads(activeDocuments))
+        
+        # Validate input
+        if not userPrompt.strip():
+            raise HTTPException(
+                status_code=400,
+                detail="User prompt cannot be empty."
+            )
+        
+        notebook_owner = fetch_owner(conn, notebookId)
+        if user_id != notebook_owner:
+            raise HTTPException(
+                status_code=403,
+                detail=f"User {user_id} does not have access to resource."
+            )
+        
+        chat_owner = fetch_chat_owner(conn, chatId)
+        if chat_owner != notebookId:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Chat {chatId} does not belong to notebook {notebookId}."
+            )
+            
+        message = messageMetadata(
+            parent_chat=chatId,
+            user_prompt=userPrompt
         )
         
-    # TODO: embed messages in vector DB
-    # TODO: query both vector tables for context
-    
-    message = messageMetadata(
-        parent_chat=chatId,
-        user_prompt=userPrompt
-    )
-    new_message = create_message(conn, message)
-    
-    # TODO: create filter to only include active documents
-    
-    # TODO: query document_embeddings top 3, min similarity 0.8
-    # TODO: query message_embeddings top 2, min similarity 0.8
-    # TODO: construct prompt, query LLM
-    # TODO: take LLM response, store here 
-    llm_response = message.llm_response = ""
-    set_llm_response(conn, new_message.message_id, llm_response)
-    pass
+        new_message = create_message(conn, message)
+        prompt_context = retrieve_context(conn=conn, query=userPrompt, active_documents=active_documents_set)
+        
+        prompt = construct_prompt(prompt_context, userPrompt)
+        
+        llm_response = query_llm(prompt)
+        new_message.llm_response = llm_response
+        set_llm_response(conn, new_message.message_id, llm_response)
+
+        return new_message
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"An unexpected error occurred: {str(e)}"
+        )
+
 
 @router.patch("/edit/{messageId}")
 async def edit_message():
