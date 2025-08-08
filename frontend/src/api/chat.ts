@@ -2,12 +2,16 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { getAccessToken } from '@/utils/accessToken';
 
 interface messageItem {
-    id?: string;
+    message_id?: string;
     notebook_id: string;
     chat_id: string;
     user_prompt: string;
-    response?: string;
+    llm_response?: string;
     updated_time?: string;
+}
+
+interface messageList {
+    messageHistory: messageItem[];
 }
 
 export const sendMessage = async (
@@ -77,7 +81,7 @@ export const loadMessageHistory = async (
 ) => {
     try {
         const accessToken = getAccessToken();
-        const response = await fetch(`http://localhost:8000/chat/history/${notebookId}/${chatId}`, {
+        const response = await fetch(`http://localhost:8000/chat/messages/history/${notebookId}/${chatId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -94,8 +98,9 @@ export const loadMessageHistory = async (
             throw new Error(`HTTP error: ${response.status}`);
         }
 
-        const data: messageItem[] = await response.json();
-        setMessageHistory(data);
+        const data: messageList = await response.json();
+        console.log(data.messageHistory);
+        setMessageHistory(data.messageHistory);
         console.log("Loaded message history");
     } catch (error) {
         console.error('Error loading message history:', error);

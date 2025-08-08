@@ -4,21 +4,6 @@ import { useChatContext } from '@/app/notebooks/[notebookId]/[chatId]/page';
 import { useRouter } from 'next/navigation';
 import { MessageTile } from './messageTile';
 
-const dummyHistory = [{
-            chat_id: "1",
-            notebook_id: "1",
-            user_prompt: "Hello!",
-            response: "Hi there! How can I help you?",
-            updated_time: "2024-06-01 10:00"
-        },
-        {
-            chat_id: "2",
-            notebook_id: "2",
-            user_prompt: "What's the weather?",
-            response: "It's sunny and 25°C.",
-            updated_time: "2024-06-01 10:01"
-        }];
-
 export const ChatWindow = () => {
     const {
         userPrompt,
@@ -33,10 +18,12 @@ export const ChatWindow = () => {
     const router = useRouter();
     const [inputValue, setInputValue] = useState('');
     
-        
+    const fetchMessageHistory = async () => {
+        await loadMessageHistory(router, chatId, notebookId, setMessageHistory, setIsLoading, setMessage);
+    };
+
     useEffect(() => {
-        setMessageHistory(dummyHistory);
-        // loadMessageHistory(router, chatId, notebookId, setMessageHistory, setIsLoading, setMessage);
+        fetchMessageHistory();
     }, []);
 
     return (
@@ -57,12 +44,13 @@ export const ChatWindow = () => {
                 align-top
                 overflow-y-auto
                 text-[20px]
+                max-h-[75vh]
             ">
                 {messageHistory.map((m) => (
                     <MessageTile
-                        key={m.chat_id}
+                        key={m.message_id}
                         userPrompt={m.user_prompt}
-                        response={m.response}
+                        response={m.llm_response}
                         updatedTime={m.updated_time}
                     />
                 ))}

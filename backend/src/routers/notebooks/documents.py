@@ -49,6 +49,7 @@ async def upload_pdf(
     try:
         return save_pdf(conn, file, notebook_id=parent_notebook, save_dir=UPLOAD_DIRECTORY)
     except Exception as e:
+        print(e)
         raise HTTPException(
             status_code=500,
             detail=f"Error saving PDF: {str(e)}"
