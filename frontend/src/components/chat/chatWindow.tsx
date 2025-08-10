@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { sendMessage, loadMessageHistory, messageItem } from '@/api/chat';
+import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
 import { useChatContext } from '@/app/notebooks/[notebookId]/[chatId]/page';
 import { useRouter } from 'next/navigation';
 import { MessageTile } from './messageTile';
@@ -11,10 +12,10 @@ export const ChatWindow = () => {
         messageHistory,
         setMessageHistory,
         notebookId,
-        chatId,
         setIsLoading,
         setMessage
-    } = useChatContext();
+    } = useNotebookContext();
+    const {chatId} = useChatContext();
     const router = useRouter();
     const [inputValue, setInputValue] = useState('');
     
@@ -46,7 +47,7 @@ export const ChatWindow = () => {
                 text-[20px]
                 max-h-[75vh]
             ">
-                {messageHistory.map((m) => (
+                {messageHistory && messageHistory.map((m) => (
                     <MessageTile
                         key={m.message_id}
                         userPrompt={m.user_prompt}

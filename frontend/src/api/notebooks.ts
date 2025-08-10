@@ -55,6 +55,7 @@ export const createNotebook = async (
         console.log("Created new notebook");
         const data: notebook = await response.json();
         setNotebooks([data, ...notebooks]);
+        return data.notebook_id;
     } catch (error) {
         console.error('Error creating notebook:', error);
         throw error;

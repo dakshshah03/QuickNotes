@@ -5,10 +5,6 @@ import { useRouter } from 'next/navigation';
 import { login } from '@/api/login';
 import { AuthErrorMessage, EmailInput, PasswordInput } from '@/components/shared/auth';
 
-// TODO: account creation form 
-// TODO: password reset form
-// TODO: correct api endpoint
-
 function LoginForm() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -36,7 +32,7 @@ function LoginForm() {
                 content-center
                 rounded-[20px]
                 bg-[#ffffff1a]
-                h-[500px]
+                h-[510px]
                 w-[400px]
             `}>
             <AuthErrorMessage message={message}/>
@@ -77,9 +73,9 @@ function LoginForm() {
                 <button type="submit" disabled={isLoading} className={`
                         rounded-[5px]
                         outline-1
-                        p-2
+                        py-2
                         hover:outline-5
-                        grid pl-6 pr-6 mt-10 
+                        grid pl-6 pr-6 mt-[20px]
                     `}>
                     {isLoading ? 'Logging In...' : 'Login'}
                 </button>

@@ -110,6 +110,7 @@ async def send_message(
     except HTTPException:
         raise
     except Exception as e:
+        print(e)
         raise HTTPException(
             status_code=500,
             detail=f"An unexpected error occurred: {str(e)}"

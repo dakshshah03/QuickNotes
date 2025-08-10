@@ -9,12 +9,12 @@ import { WriteMessage } from '@/components/chat/messageBox';
 
 function NotebookPage() {
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-full">
             <EmptyChatBox/>
-            <div className="flex-4">
+            <div className="flex-1">
             </div>
             <div className="flex-shrink-0 flex justify-center">
-                {/* <WriteMessage/> */}
+                <WriteMessage inNotebook={true}/>
             </div>
         </div>
     )

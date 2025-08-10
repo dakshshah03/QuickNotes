@@ -6,6 +6,7 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { NotebookSidebar } from "@/components/notebook/notebookSideBar";
 import { useRouter } from "next/navigation";
+import { messageItem } from '@/api/chat';
 
 const NotebookContext = createContext<{
     selectedFile: File | null;
@@ -19,6 +20,10 @@ const NotebookContext = createContext<{
     notebookId: string;
     chatMessage: string;
     setChatMessage: (cmsg: string) => void;
+    messageHistory: messageItem[];
+    setMessageHistory: (messages: messageItem[]) => void;
+    userPrompt: string;
+    setUserPrompt: (prompt: string) => void;
 } | null>(null);
 
 export const useNotebookContext = () => {
@@ -43,6 +48,8 @@ export default function NotebookLayout({
     const { notebookId } = unwrappedParams;
     const [chatMessage, setChatMessage] = useState<string>('');
     const [activeDocuments, setActiveDocIds] = useState<Set<string>>(new Set());
+    const [messageHistory, setMessageHistory] = useState<messageItem[]>([]);
+    const [userPrompt, setUserPrompt] = useState<string>("");
     const router = useRouter();
 
     return (
@@ -57,17 +64,21 @@ export default function NotebookLayout({
             setIsLoading,
             notebookId,
             chatMessage,
-            setChatMessage
+            setChatMessage,
+            messageHistory,
+            setMessageHistory,
+            userPrompt,
+            setUserPrompt
         }}>
             {/* bg-gradient-to-t from-[#015a70] to-[#53003f] */}
             {/* bg-gradient-to-t from-[#232627] to-[#242424] */}
             <div className={`
                 bg-gradient-to-t from-[#015a70] to-[#53003f]
-                h-[100vh]
-                w-[100vw]
+                h-full
+                w-full
                 flex
             `}>
-                <div className="w-80 flex-shrink-0 hidden lg:block pt-[50px]">
+                <div className="w-80 flex-shrink-0 hidden lg:block">
                     <NotebookSidebar/>
                 </div>
                 <div className="flex-1">

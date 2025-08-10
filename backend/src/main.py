@@ -17,7 +17,7 @@ from routers.authentication import login
 from routers.dashboard import dashboard
 from routers.notebooks import documents
 from routers.notebooks import notebook
-from routers.chats import messages
+from routers.chats import messages, chat
 from routers.authentication import user
 
 @asynccontextmanager
@@ -58,5 +58,5 @@ app.include_router(documents.router)
 app.include_router(notebook.router)
 app.include_router(messages.router)
 app.include_router(user.router)
-
+app.include_router(chat.router)
 

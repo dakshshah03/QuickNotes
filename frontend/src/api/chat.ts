@@ -26,7 +26,6 @@ export const sendMessage = async (
     const accessToken = getAccessToken();
     const formData = new FormData();
     
-    // Log the data being sent
     console.log('Sending message with data:', {
         notebookId: messageMetadata.notebook_id,
         chatId: messageMetadata.chat_id,
@@ -104,6 +103,46 @@ export const loadMessageHistory = async (
         console.log("Loaded message history");
     } catch (error) {
         console.error('Error loading message history:', error);
+        throw error;
+    }
+};
+
+export const createChat = async (
+    chatName: string,
+    notebookId: string,
+    router: AppRouterInstance
+) => {
+    try {
+        const accessToken = getAccessToken();
+        const formData = new FormData();
+        
+        formData.append("chat_name", chatName);
+        formData.append("notebook_id", notebookId);
+        
+        const response = await fetch(`http://localhost:8000/chat/create`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: formData
+        });
+
+        if (response.status === 401) {
+            router.push('/auth/login');
+            return;
+        }
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error(`HTTP error: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log("Chat created successfully:", data);
+        return data;
+    } catch (error) {
+        console.error('Error creating chat:', error);
         throw error;
     }
 };

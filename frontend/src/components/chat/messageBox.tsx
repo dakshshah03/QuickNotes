@@ -1,43 +1,65 @@
 import React, { useEffect, useState } from 'react';
-import { sendMessage, loadMessageHistory, messageItem } from '@/api/chat';
-import { useChatContext } from '@/app/notebooks/[notebookId]/[chatId]/page';
-import { useRouter } from 'next/navigation';
+import { sendMessage, loadMessageHistory, messageItem, createChat } from '@/api/chat';
+import { useRouter, useParams } from 'next/navigation';
 import { useSidebarContext } from '../notebook/notebookSideBar';
 import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
 
-export const WriteMessage = () => {
+interface WriteMessageProps {
+    inNotebook?: boolean;
+}
+
+export const WriteMessage = ({ inNotebook = true }: WriteMessageProps) => {
     const {
         userPrompt,
         setUserPrompt,
         messageHistory,
         setMessageHistory,
         notebookId,
-        chatId,
         setIsLoading,
-        setMessage
-    } = useChatContext();
-    const {
+        setMessage,
         activeDocuments,
         setActiveDocIds,
     } = useNotebookContext();
+    
     const router = useRouter();
+    const params = useParams();
+    const chatId = params.chatId as string;
     const [inputValue, setInputValue] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
         if (!inputValue.trim()) return; 
         
-        const new_msg: messageItem = {
-            'notebook_id': notebookId,
-            'chat_id': chatId,
-            'user_prompt': inputValue 
-        };
-        
-        setUserPrompt(inputValue);
-        setMessageHistory([...messageHistory, new_msg]);
-        sendMessage(router, new_msg, messageHistory, activeDocuments, setMessageHistory, setIsLoading, setMessage);
-        setInputValue('');
+        try {
+            if (inNotebook) {
+                const chatData = await createChat(
+                    inputValue.substring(0, 30),
+                    notebookId,
+                    router
+                );
+                
+                if (chatData && chatData.chat_id) {
+                    router.push(`/notebooks/${notebookId}/${chatData.chat_id}`);
+                }
+            } else {
+                const new_msg: messageItem = {
+                    'notebook_id': notebookId,
+                    'chat_id': chatId,
+                    'user_prompt': inputValue, 
+                    'message_id': "000tmp"
+                };
+                
+                setUserPrompt(inputValue);
+                setMessageHistory([...messageHistory, new_msg]);
+                sendMessage(router, new_msg, messageHistory, activeDocuments, setMessageHistory, setIsLoading, setMessage);
+            }
+            
+            setInputValue('');
+        } catch (error) {
+            console.error('Error handling message submit:', error);
+            setMessage('Error processing your message. Please try again.');
+        }
     };
 
     return (
