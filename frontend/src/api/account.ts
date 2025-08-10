@@ -22,20 +22,23 @@ export const createUser = async (
     try {
         setIsLoading(true);
         
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('password', password);
-
-        const response = await fetch('http://localhost:8000/auth/create', { 
+        const response = await fetch('http://localhost:8000/user/create', { 
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password
+            }),
         });
 
         if (!response.ok) {
             const errorData: AccountCreateErrorResponse = await response.json();
-            setMessage("Account Creation failed: " + (errorData.message));
-            console.error("Login error:", errorData);
+            setMessage("Account Creation failed: " + (errorData.message || 'Unknown error'));
+            console.error("Create user error:", errorData);
+            return;
         } 
 
         const data: AccountCreateSuccessResponse = await response.json();

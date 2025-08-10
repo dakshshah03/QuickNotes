@@ -17,12 +17,10 @@ def fetch_pw_hash(conn: psycopg.Connection, email: EmailStr):
     try:
         cursor = conn.cursor()
         
-        # First, let's check if the table exists and has data
         cursor.execute("SELECT COUNT(*) FROM users;")
         user_count = cursor.fetchone()[0]
         print(f"Total users in database: {user_count}")
         
-        # Now fetch the specific user
         pw_hash_query = """
         SELECT user_id, password_hash
         FROM users
@@ -40,8 +38,10 @@ def fetch_pw_hash(conn: psycopg.Connection, email: EmailStr):
             
     except psycopg.Error as e:
         print(f"Database error retrieving password hash for email {email}: {e}")
+        raise
     finally:
         if cursor:
             cursor.close()
     
     return user_id, password_hash
+

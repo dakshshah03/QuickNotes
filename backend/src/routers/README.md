@@ -1,8 +1,10 @@
 # API Endpoints
 
-## Authentication
+## Authentication/accounts
 - `./authentication/login.py`
-    - `POST /auth/token/`: login endpoint
+    - `POST /auth/token`: login endpoint
+- `./authentication/user.py`
+    - `POST /auth/create`
 
 TODO:
 - `/auth/create/`: create account

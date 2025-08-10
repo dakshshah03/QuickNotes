@@ -18,6 +18,7 @@ from routers.dashboard import dashboard
 from routers.notebooks import documents
 from routers.notebooks import notebook
 from routers.chats import messages
+from routers.authentication import user
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -56,5 +57,6 @@ app.include_router(dashboard.router)
 app.include_router(documents.router)
 app.include_router(notebook.router)
 app.include_router(messages.router)
+app.include_router(user.router)
 
 

@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 import jwt
+import datetime
 
 from schema.authentication import JWTPayload
 from utils.dependencies import DBCxn
@@ -32,6 +33,7 @@ async def login_for_access_token(
     
     jwt_payload = JWTPayload(user_id=user_id)
     jwt_claim = jwt_payload.model_dump(mode='json')
+    jwt_claim["exp"] = datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=12)
     
     encoded_jwt = jwt.encode(jwt_claim, Settings.jwt_secret_key, Settings.jwt_algorithm)
 
@@ -54,5 +56,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         if user_id is None:
             raise credentials_exception
         return user_id
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=401,
+            detail="Token has expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     except jwt.PyJWTError:
         raise credentials_exception

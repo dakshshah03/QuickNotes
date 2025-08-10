@@ -65,4 +65,12 @@ INSERT INTO chats (chat_id, parent_notebook, chat_name) VALUES
     (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'Second Chat'),
     (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'Project Discussion');
 
+-- Update user_id with a new random UUID
+UPDATE users 
+SET user_id = gen_random_uuid() 
+WHERE email = 'temp.user@example.com';
+
+-- Add default value to existing user_id column to generate random UUIDs
+ALTER TABLE users ALTER COLUMN user_id SET DEFAULT gen_random_uuid();
+
 
