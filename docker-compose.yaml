@@ -1,11 +1,10 @@
 version: '3.8'
 
-# postgres database
 services:
   db:
-    image: postgres:16-alpine3.19
+    image: pgvector/pgvector:0.8.0-pg16
     container_name: QuickNotesPostgreSQL
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: notebookDB
       POSTGRES_USER: ${POSTGRES_USER}
@@ -14,3 +13,4 @@ services:
       - "5432:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data 
+      - ./test_init.sql:/docker-entrypoint-initdb.d/test_init.sql

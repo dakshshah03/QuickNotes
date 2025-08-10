@@ -13,14 +13,14 @@ class UserCreateRequest(BaseModel):
         description="The user's unique email address.",
         example="john.doe@example.com"
     )
-    username: str = Field(
-        ...,
-        min_length=3,
-        max_length=32,
-        description="The user's unique username. Must be between 3 and 32 characters.",
-        example="johndoe123",
-        pattern=r"^[a-zA-Z0-9_]+$",
-    )
+    # username: str = Field(
+    #     ...,
+    #     min_length=3,
+    #     max_length=32,
+    #     description="The user's unique username. Must be between 3 and 32 characters.",
+    #     example="johndoe123",
+    #     pattern=r"^[a-zA-Z0-9_]+$",
+    # )
     name: str = Field(
         ...,
         min_length=3,

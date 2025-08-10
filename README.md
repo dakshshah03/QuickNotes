@@ -1,5 +1,7 @@
 MVP features
 
+`docker exec -it QuickNotesPostgreSQL psql -U DakshShah -d notebookDB`
+
 Frontend:
 - react
 - login page
