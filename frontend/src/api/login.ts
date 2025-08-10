@@ -31,7 +31,7 @@ export const login = async (
 
         if (response.ok) {
             const data: LoginSuccessResponse = await response.json();
-            setMessage("Login Success for " + data.email);
+            // setMessage("Login Success for " + data.email);
             
             if (typeof window !== 'undefined') {
                 localStorage.setItem('access_token', data.access_token);

@@ -23,7 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="flex flex-col">
+      {/* <div className="h-[70px] flex-shrink-0">
+        menu bar
+      </div> */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
