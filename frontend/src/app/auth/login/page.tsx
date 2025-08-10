@@ -64,6 +64,15 @@ function LoginForm() {
                     setPassword={setPassword}
                     isLoading={isLoading}
                     text="Password"/>
+                    
+                <div className="text-left mt-2">
+                    <a 
+                        href="/auth/reset" 
+                        className="text-[#7fcefc] hover:underline"
+                    >
+                        Reset Password
+                    </a>
+                </div>
 
                 <button type="submit" disabled={isLoading} className={`
                         rounded-[5px]

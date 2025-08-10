@@ -53,3 +53,11 @@ export const createUser = async (
         setIsLoading(false);
     }
 }
+
+export const beginReset = async () => {
+// api will send password reset email to user
+}
+
+export const resetPassword = async () => {
+// sets new password (user id is JWT encoded in the URL)
+}

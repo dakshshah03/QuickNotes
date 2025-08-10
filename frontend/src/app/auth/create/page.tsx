@@ -2,16 +2,16 @@
 
 import React, { useEffect, useState, type FormEvent} from 'react';
 import { useRouter } from 'next/navigation';
-import { login } from '@/api/login';
 
 import { AuthErrorMessage, EmailInput, PasswordInput, NameInput } from '@/components/shared/auth';
+import { createUser } from '@/api/account';
 
 
 export default function AccountCreate() {
     const [email, setEmail] = useState<string>('');
     const [name, setName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [confirmPassword, setConfirmPassword] = useState<string>(''); // Added state for confirm password
+    const [confirmPassword, setConfirmPassword] = useState<string>(''); 
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -23,6 +23,15 @@ export default function AccountCreate() {
             setMessage("Error: Passwords don't match");
             return;
         }
+
+        await createUser(
+            name,
+            email,
+            password,
+            router,
+            setIsLoading,
+            setMessage
+        )
     };
 
     useEffect(() => {
@@ -88,7 +97,7 @@ export default function AccountCreate() {
                         hover:outline-5
                         grid pl-6 pr-6 mt-10 
                     `}>
-                    {isLoading ? 'Logging In...' : 'Login'}
+                    {isLoading ? 'Creating Account In' : 'Create Account'}
                 </button>
             </form>
         </div>
