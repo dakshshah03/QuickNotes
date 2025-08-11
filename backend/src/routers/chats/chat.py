@@ -1,5 +1,4 @@
-from fastapi import HTTPException, Depends, Form
-from fastapi import APIRouter
+from fastapi import HTTPException, Depends, Form, status, APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 
@@ -15,7 +14,7 @@ from jwt import PyJWTError
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 router = APIRouter(prefix="/chat", tags=["chat CRUD"])
 
-@router.post("/create")
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 async def create_chat(
         conn: DBCxn,
         chat_name: str = Form(...),
@@ -47,15 +46,11 @@ async def create_chat(
             detail="Invalid token"
         )
     except Exception as e:
-        print(e)
         raise HTTPException(
             status_code=500,
             detail=f"Internal server error: {e}"
         )
-    return JSONResponse(
-            status_code=201,
-            content=new_chat.model_dump_json()
-        )
+    return new_chat
 
 @router.patch("/name")
 async def rename_chat():

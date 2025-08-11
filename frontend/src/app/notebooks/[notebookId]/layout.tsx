@@ -8,6 +8,7 @@ import { NotebookSidebar } from "@/components/notebook/notebookSideBar";
 import { useRouter } from "next/navigation";
 import { messageItem } from '@/api/chat';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { chatItem } from '@/components/notebook/notebookSideBar';
 
 const NotebookContext = createContext<{
     selectedFile: File | null;
@@ -25,6 +26,8 @@ const NotebookContext = createContext<{
     setMessageHistory: (messages: messageItem[]) => void;
     userPrompt: string;
     setUserPrompt: (prompt: string) => void;
+    chats: chatItem[]; 
+    setChats: (chats: chatItem[]) => void; 
 } | null>(null);
 
 export const useNotebookContext = () => {
@@ -51,6 +54,7 @@ export default function NotebookLayout({
     const [activeDocuments, setActiveDocIds] = useState<Set<string>>(new Set());
     const [messageHistory, setMessageHistory] = useState<messageItem[]>([]);
     const [userPrompt, setUserPrompt] = useState<string>("");
+    const [chats, setChats] = useState<chatItem[]>([]); // added
     const router = useRouter();
 
     return (
@@ -70,7 +74,9 @@ export default function NotebookLayout({
                 messageHistory,
                 setMessageHistory,
                 userPrompt,
-                setUserPrompt
+                setUserPrompt,
+                chats,
+                setChats
             }}>
                 {/* bg-gradient-to-t from-[#015a70] to-[#53003f] */}
                 {/* bg-gradient-to-t from-[#232627] to-[#242424] */}

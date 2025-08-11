@@ -1,5 +1,6 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { getAccessToken } from '@/utils/accessToken';
+import { chatItem } from './notebooks';
 
 interface messageItem {
     message_id?: string;
@@ -61,9 +62,8 @@ export const sendMessage = async (
         console.log("Message sent successfully");
 
         const data: messageItem = await response.json();
-        const updatedHistory = [...messageHistory];
-        updatedHistory[updatedHistory.length - 1] = data;
-        setMessageHistory(updatedHistory);
+        const filteredHistory = messageHistory.filter(msg => msg.message_id !== "000tmp");
+        setMessageHistory([...filteredHistory, data]);
     } catch (error) {
         console.error('Error sending message:', error);
         throw error;
@@ -138,7 +138,7 @@ export const createChat = async (
             throw new Error(`HTTP error: ${response.status} - ${errorText}`);
         }
 
-        const data = await response.json();
+        const data: chatItem = await response.json();
         console.log("Chat created successfully:", data);
         return data;
     } catch (error) {

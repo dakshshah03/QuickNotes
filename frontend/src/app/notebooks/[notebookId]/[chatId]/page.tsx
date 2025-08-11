@@ -33,8 +33,10 @@ export default function chatPage({
             chatId
         }}>
             <div className="flex flex-col h-full">
-                <div className="flex-1 flex justify-center pt-[50px]">
-                    <ChatWindow/>
+                <div className="flex-1 flex flex-col overflow-hidden">
+                    <div className="flex-1 flex justify-center overflow-y-auto">
+                        <ChatWindow/>
+                    </div>
                 </div>
                 <div className="flex-shrink-0 flex justify-center">
                     <WriteMessage inNotebook={false}/>

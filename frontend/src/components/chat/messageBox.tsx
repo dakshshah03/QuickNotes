@@ -19,6 +19,8 @@ export const WriteMessage = ({ inNotebook = true }: WriteMessageProps) => {
         setMessage,
         activeDocuments,
         setActiveDocIds,
+        chats,
+        setChats
     } = useNotebookContext();
     
     const router = useRouter();
@@ -38,9 +40,21 @@ export const WriteMessage = ({ inNotebook = true }: WriteMessageProps) => {
                     notebookId,
                     router
                 );
-                
-                if (chatData && chatData.chat_id) {
-                    router.push(`/notebooks/${notebookId}/${chatData.chat_id}`);
+
+                if (chatData && chatData.id) {
+                    const new_msg: messageItem = {
+                        'notebook_id': notebookId,
+                        'chat_id': chatData.id,
+                        'user_prompt': inputValue,
+                        'message_id': "000tmp"
+                    };
+                    setChats([...chats, chatData]);
+
+                    setUserPrompt(inputValue);
+                    setMessageHistory([new_msg]);
+                    sendMessage(router, new_msg, messageHistory, activeDocuments, setMessageHistory, setIsLoading, setMessage);
+
+                    router.push(`/notebooks/${notebookId}/${chatData.id}`);
                 }
             } else {
                 const new_msg: messageItem = {
@@ -65,11 +79,12 @@ export const WriteMessage = ({ inNotebook = true }: WriteMessageProps) => {
     return (
         <form
             className="
+                flex-shrink-0
                 flex
                 min-w-[360px]
                 w-4/5
                 lg:w-3/5
-                mb-[40px]
+                mb-[20px]
                 rounded-3xl
             "
             onSubmit={handleSubmit}

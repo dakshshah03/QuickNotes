@@ -30,10 +30,11 @@ const NotebookSidebar = () => {
         setMessage,
         setIsLoading,
         activeDocuments,
-        setActiveDocIds
+        setActiveDocIds,
+        chats, // moved from local state
+        setChats // moved from local state
     } = useNotebookContext();
     
-    const [chats, setChats] = useState<chatItem[]>([]);
     const [documents, setDocuments] = useState<documentItem[]>([]);
     const router = useRouter();
 
@@ -41,7 +42,7 @@ const NotebookSidebar = () => {
         await loadSidebar(
             router,
             notebookId,
-            setChats,
+            setChats, // now using context
             setDocuments,
             setIsLoading,
             setMessage
@@ -56,15 +57,13 @@ const NotebookSidebar = () => {
     }, [documents]);
 
     const updateDocumentStatus = (doc_id: string) => {
-        setActiveDocIds((prev) => {
-            const newSet = new Set(prev);
-            if (newSet.has(doc_id)) {
-                newSet.delete(doc_id);
-            } else {
-                newSet.add(doc_id);
-            }
-            return newSet;
-        });
+        const updatedSet = new Set(activeDocuments);
+        if (updatedSet.has(doc_id)) {
+            updatedSet.delete(doc_id);
+        } else {
+            updatedSet.add(doc_id);
+        }
+        setActiveDocIds(updatedSet);
     };
 
     return (
@@ -116,7 +115,7 @@ const NotebookSidebar = () => {
                 </div>
                 <div className="ml-10 mr-10 mb-5 border-b border-[#ffffff6c]"/>
                 <div>
-                    {chats.map((cl) => (
+                    {chats.map((cl) => ( // now using context
                         <button 
                             className='grid min-w-full p-[5px] pr-[20px] pl-[20px]'
                             key={cl.id}

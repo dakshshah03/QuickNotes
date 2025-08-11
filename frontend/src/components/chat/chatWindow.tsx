@@ -29,32 +29,29 @@ export const ChatWindow = () => {
 
     return (
         <div className="
-            flex
             min-w-[360px]
             w-4/5
             lg:w-3/5
             mb-[40px]
         ">
-            <div className="
-                flex-1
-                h-full
-                p-[20px]
-                rounded-3xl
-                outline-none
-                resize-none
-                align-top
-                overflow-y-auto
-                text-[20px]
-                max-h-[75vh]
-            ">
-                {messageHistory && messageHistory.map((m) => (
-                    <MessageTile
-                        key={m.message_id}
-                        userPrompt={m.user_prompt}
-                        response={m.llm_response}
-                        updatedTime={m.updated_time}
-                    />
-                ))}
+            <div className="flex-1 overflow-y-auto">
+                <div className="
+                    p-[20px]
+                    rounded-3xl
+                    outline-none
+                    resize-none
+                    align-top
+                    text-[20px]
+                ">
+                    {messageHistory && messageHistory.map((m) => (
+                        <MessageTile
+                            key={m.message_id}
+                            userPrompt={m.user_prompt}
+                            response={m.llm_response}
+                            updatedTime={m.updated_time}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     )
