@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
+import { AuthProvider } from "@/context/AuthContext";
+import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,36 +29,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full flex flex-col`}
       >
-        <div className="
-          h-[70px]
-          flex-shrink-0
-        ">
-          <nav className="
+        <AuthProvider>
+          <div className="
             h-[70px]
             flex-shrink-0
-            bg-linear-to-t from-[#2c2c2c] to-[#3d3d3d8c]
-            border-b
-            border-gray-200
-            flex
-            items-center
-            px-6
           ">
-            <div className="flex space-x-6">
-              <Link href="/" className="text-white hover:text-gray-100 font-medium">
-                Home
-              </Link>
-              <Link href="/dashboard" className="text-white hover:text-gray-100 font-medium">
-                Dashboard
-              </Link>
-              <Link href="/auth/logout" className="text-white hover:text-gray-100 font-medium">
-                Logout
-              </Link>
-            </div>
-          </nav>
-        </div>
-        <main className="flex-1 min-h-0">
-          {children}
-        </main>
+            <Navbar />
+          </div>
+          <main className="flex-1 min-h-0">
+            {children}
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );

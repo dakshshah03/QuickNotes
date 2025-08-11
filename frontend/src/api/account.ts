@@ -1,4 +1,5 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { setAuthToken } from '@/utils/auth';
 
 interface AccountCreateErrorResponse {
   message: string; 
@@ -43,11 +44,16 @@ export const createUser = async (
 
         const data: AccountCreateSuccessResponse = await response.json();
 
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('access_token', data.access_token);
-            localStorage.setItem('user_id', data.user_id);
+        setAuthToken(data.access_token, data.user_id);
+        
+        // Check for stored redirect destination
+        const redirectPath = sessionStorage.getItem('redirectAfterLogin');
+        if (redirectPath) {
+            sessionStorage.removeItem('redirectAfterLogin');
+            router.push(redirectPath);
+        } else {
+            router.push('/dashboard');
         }
-        router.push('/dashboard');
 
     } catch (error) {
         setMessage("An unexpected error occurred. Please try again later.");

@@ -27,6 +27,9 @@ export const loadNotebookList = async (
         
         // Access token is expired or doesnt exist, redirect to login
         if (response.status === 401) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_id');
+            document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             router.push('/auth/login');
             return;
         }

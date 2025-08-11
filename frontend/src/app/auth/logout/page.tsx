@@ -1,21 +1,14 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Logout() {
-    const router = useRouter();
+    const { logout } = useAuth();
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user_id');
-        }
-        
-        console.log("Logout Successful");
-        
-        router.push('/auth/login');
-    }, [router]);
+        logout();
+    }, [logout]);
 
     return (
         <div className="flex items-center justify-center h-full">

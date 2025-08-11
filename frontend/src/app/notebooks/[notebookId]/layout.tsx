@@ -7,6 +7,7 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { NotebookSidebar } from "@/components/notebook/notebookSideBar";
 import { useRouter } from "next/navigation";
 import { messageItem } from '@/api/chat';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const NotebookContext = createContext<{
     selectedFile: File | null;
@@ -53,38 +54,40 @@ export default function NotebookLayout({
     const router = useRouter();
 
     return (
-        <NotebookContext.Provider value={{
-            selectedFile,
-            setSelectedFile,
-            activeDocuments,
-            setActiveDocIds,
-            message,
-            setMessage,
-            isLoading,
-            setIsLoading,
-            notebookId,
-            chatMessage,
-            setChatMessage,
-            messageHistory,
-            setMessageHistory,
-            userPrompt,
-            setUserPrompt
-        }}>
-            {/* bg-gradient-to-t from-[#015a70] to-[#53003f] */}
-            {/* bg-gradient-to-t from-[#232627] to-[#242424] */}
-            <div className={`
-                bg-gradient-to-t from-[#015a70] to-[#53003f]
-                h-full
-                w-full
-                flex
-            `}>
-                <div className="w-80 flex-shrink-0 hidden lg:block">
-                    <NotebookSidebar/>
+        <ProtectedRoute>
+            <NotebookContext.Provider value={{
+                selectedFile,
+                setSelectedFile,
+                activeDocuments,
+                setActiveDocIds,
+                message,
+                setMessage,
+                isLoading,
+                setIsLoading,
+                notebookId,
+                chatMessage,
+                setChatMessage,
+                messageHistory,
+                setMessageHistory,
+                userPrompt,
+                setUserPrompt
+            }}>
+                {/* bg-gradient-to-t from-[#015a70] to-[#53003f] */}
+                {/* bg-gradient-to-t from-[#232627] to-[#242424] */}
+                <div className={`
+                    bg-gradient-to-t from-[#015a70] to-[#53003f]
+                    h-full
+                    w-full
+                    flex
+                `}>
+                    <div className="w-80 flex-shrink-0 hidden lg:block">
+                        <NotebookSidebar/>
+                    </div>
+                    <div className="flex-1">
+                        {children}
+                    </div>
                 </div>
-                <div className="flex-1">
-                    {children}
-                </div>
-            </div>
-        </NotebookContext.Provider>
+            </NotebookContext.Provider>
+        </ProtectedRoute>
     )
 };

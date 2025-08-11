@@ -40,37 +40,37 @@ CREATE TABLE IF NOT EXISTS message_history (
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Begin transaction to ensure atomicity
-BEGIN;
+-- -- Begin transaction to ensure atomicity
+-- BEGIN;
 
--- Insert temporary test data
-INSERT INTO users (user_id, email, name, password_hash) VALUES 
-    ('550e8400-e29b-41d4-a716-446655440000', 'temp.user@example.com', 'Temp User', '$argon2id$v=19$m=32768,t=3,p=2$g9lbJ7eBB3tANU3atxlvdA$zLpl2varquUJ/Iim1cIwY6jtaAioMZMlWBE+SvBS6t4');
+-- -- Insert temporary test data
+-- INSERT INTO users (user_id, email, name, password_hash) VALUES 
+--     ('550e8400-e29b-41d4-a716-446655440000', 'temp.user@example.com', 'Temp User', '$argon2id$v=19$m=32768,t=3,p=2$g9lbJ7eBB3tANU3atxlvdA$zLpl2varquUJ/Iim1cIwY6jtaAioMZMlWBE+SvBS6t4');
 
-INSERT INTO notebooks (notebook_id, notebook_owner, notebook_name, pdf_storage_dir) VALUES 
-    ('550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440000', 'Temp Notebook', '/tmp/notebooks/temp_notebook');
+-- INSERT INTO notebooks (notebook_id, notebook_owner, notebook_name, pdf_storage_dir) VALUES 
+--     ('550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440000', 'Temp Notebook', '/tmp/notebooks/temp_notebook');
 
--- Commit the transaction
-COMMIT;
+-- -- Commit the transaction
+-- COMMIT;
 
--- Verify the data was inserted
-SELECT 'Users inserted:' as info, COUNT(*) as count FROM users;
-SELECT 'Notebooks inserted:' as info, COUNT(*) as count FROM notebooks;
-SELECT * FROM users;
-SELECT * FROM notebooks;
+-- -- Verify the data was inserted
+-- SELECT 'Users inserted:' as info, COUNT(*) as count FROM users;
+-- SELECT 'Notebooks inserted:' as info, COUNT(*) as count FROM notebooks;
+-- SELECT * FROM users;
+-- SELECT * FROM notebooks;
 
--- Insert dummy chats for parent_notebook '13e06d33-1ade-4022-8ff7-94d33441c697'
-INSERT INTO chats (chat_id, parent_notebook, chat_name) VALUES
-    (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'First Chat'),
-    (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'Second Chat'),
-    (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'Project Discussion');
+-- -- Insert dummy chats for parent_notebook '13e06d33-1ade-4022-8ff7-94d33441c697'
+-- INSERT INTO chats (chat_id, parent_notebook, chat_name) VALUES
+--     (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'First Chat'),
+--     (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'Second Chat'),
+--     (gen_random_uuid(), '13e06d33-1ade-4022-8ff7-94d33441c697', 'Project Discussion');
 
--- Update user_id with a new random UUID
-UPDATE users 
-SET user_id = gen_random_uuid() 
-WHERE email = 'temp.user@example.com';
+-- -- Update user_id with a new random UUID
+-- UPDATE users 
+-- SET user_id = gen_random_uuid() 
+-- WHERE email = 'temp.user@example.com';
 
--- Add default value to existing user_id column to generate random UUIDs
-ALTER TABLE users ALTER COLUMN user_id SET DEFAULT gen_random_uuid();
+-- -- Add default value to existing user_id column to generate random UUIDs
+-- ALTER TABLE users ALTER COLUMN user_id SET DEFAULT gen_random_uuid();
 
 

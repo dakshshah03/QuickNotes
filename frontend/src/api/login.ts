@@ -1,4 +1,5 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { setAuthToken } from '@/utils/auth';
 
 interface LoginErrorResponse {
   message: string; 
@@ -31,16 +32,19 @@ export const login = async (
 
         if (response.ok) {
             const data: LoginSuccessResponse = await response.json();
-            // setMessage("Login Success for " + data.email);
             
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('access_token', data.access_token);
-                localStorage.setItem('user_id', data.user_id);
-            }
+            setAuthToken(data.access_token, data.user_id);
             
             console.log("Login Successful:", data);
             
-            router.push('/dashboard');
+            // Check for stored redirect destination
+            const redirectPath = sessionStorage.getItem('redirectAfterLogin');
+            if (redirectPath) {
+                sessionStorage.removeItem('redirectAfterLogin');
+                router.push(redirectPath);
+            } else {
+                router.push('/dashboard');
+            }
         } else {
             const errorData: LoginErrorResponse = await response.json();
             setMessage("Login failed: " + (errorData.message || "Invalid credentials"));

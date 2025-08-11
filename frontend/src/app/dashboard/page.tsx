@@ -6,6 +6,7 @@ import { loadNotebookList } from '@/api/dashboard';
 import { notebook } from '@/api/dashboard'
 import { NotebookTile, CreateNotebookInput } from '@/components/notebookTile';
 import { createNotebook } from '@/api/notebooks';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 function NotebookSelector() {
     const [notebooks, setNotebooks] = useState<notebook[]>([]);
@@ -14,16 +15,6 @@ function NotebookSelector() {
     const [name, setName] = useState<string>('');
     const [showInput, setShowInput] = useState<boolean>(false);
     const router = useRouter();
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const accessToken = localStorage.getItem('access_token');
-            if (!accessToken) {
-                router.push('/auth/login');
-                return;
-            }
-        }
-    }, []);
 
     const fetchNotebookList = async () => {
         await loadNotebookList(
@@ -96,4 +87,10 @@ function NotebookSelector() {
     )
 };
 
-export default NotebookSelector;
+export default function Dashboard() {
+    return (
+        <ProtectedRoute>
+            <NotebookSelector />
+        </ProtectedRoute>
+    );
+}
