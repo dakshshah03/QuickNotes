@@ -80,8 +80,9 @@ export default function NotebookLayout({
             }}>
                 {/* bg-gradient-to-t from-[#015a70] to-[#53003f] */}
                 {/* bg-gradient-to-t from-[#232627] to-[#242424] */}
+                {/* bg-gradient-to-t from-[#015a70] to-[#53003f] */}
                 <div className={`
-                    bg-gradient-to-t from-[#015a70] to-[#53003f]
+                    bg-gradient-to-t from-[#504c4c65]
                     h-full
                     w-full
                     flex

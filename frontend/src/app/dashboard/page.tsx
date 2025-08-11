@@ -48,7 +48,7 @@ function NotebookSelector() {
 
     return (
         <div className={`
-                bg-linear-to-t from-[#0d4250] to-[#5f505c]
+                bg-gradient-to-t from-[#504c4c65]
                 h-full
                 w-full
                 flex
@@ -60,7 +60,7 @@ function NotebookSelector() {
                     flex-1
                     w-full
                     grid
-                    grid-cols-[repeat(auto-fit,minmax(200px,1fr))]
+                    grid-cols-[repeat(auto-fill,minmax(200px,1fr))]
                     gap-10
                     p-[100px]
                     justify-items-center
@@ -83,7 +83,6 @@ function NotebookSelector() {
                 ))}
             </div>
         </div>
-        
     )
 };
 
