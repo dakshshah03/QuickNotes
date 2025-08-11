@@ -32,6 +32,13 @@ CREATE TABLE IF NOT EXISTS documents (
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- table to store arxiv document metadata
+CREATE TABLE IF NOT EXISTS arxiv_documents (
+    arxiv_id VARCHAR(30) PRIMARY KEY DEFAULT,
+    summary TEXT NOT NULL,
+    name VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS message_history (
     message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     parent_chat UUID NOT NULL,

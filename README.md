@@ -24,6 +24,7 @@ Along with Llama-Index for RAG.
 2. Generate API keys for:
     - OpenAI
     - Mistral
+    - Gemini
 3. Make a copy of `.env.template`, rename it to `.env`, then fill in each environment variable.
 4. In `./backend/`, run `uv sync` to install the required python packages
 5. In `./frontend/`, run `npm ci` to install the required TS packages.

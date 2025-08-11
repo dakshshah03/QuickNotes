@@ -69,7 +69,7 @@ def get_document_list(conn: psycopg.Connection, notebook_id: UUID) -> List[docum
     try:
         cursor = conn.cursor()
         retrieve_doc_list_query = """
-        SELECT document_id, document_name, creation_time
+        SELECT document_id, document_name, creation_time, metadata
         FROM documents
         WHERE parent_notebook = %s;
         """
