@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { sendMessage, loadMessageHistory, messageItem } from '@/api/chat';
 import { useNotebookContext } from '@/app/notebooks/[notebookId]/layout';
-import { useChatContext } from '@/app/notebooks/[notebookId]/[chatId]/page';
+import { useChatContext } from '@/context/chatContext';
 import { useRouter } from 'next/navigation';
 import { MessageTile } from './messageTile';
 

@@ -1,11 +1,10 @@
+'use client';
 import React, {useEffect} from 'react';
 import { useRouter } from 'next/navigation';
 import { getAccessToken } from '@/utils/accessToken';
 
-export default function verify_redirect(navigate_to: string) {
+function RedirectHandler({ navigate_to }: { navigate_to: string }) {
     const router = useRouter();
-    const accessToken = getAccessToken();
-
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -17,5 +16,18 @@ export default function verify_redirect(navigate_to: string) {
                 router.push(navigate_to);
             }
         }
-    }, []);
+    }, [navigate_to, router]);
+
+    return null;
+}
+
+export default async function VerifyRedirect({ 
+    searchParams 
+}: { 
+    searchParams: Promise<{ navigate_to?: string }> 
+}) {
+    const resolvedSearchParams = await searchParams;
+    const navigate_to = resolvedSearchParams?.navigate_to || '/';
+
+    return <RedirectHandler navigate_to={navigate_to} />;
 }

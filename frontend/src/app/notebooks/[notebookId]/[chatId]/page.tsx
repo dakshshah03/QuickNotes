@@ -1,31 +1,16 @@
 'use client';
 
-import React, { createContext, useContext } from 'react';
+import React from 'react';
 import { WriteMessage } from '@/components/chat/messageBox';
 import { ChatWindow } from '@/components/chat/chatWindow';
-import { useRouter } from 'next/navigation';
+import { ChatContext } from '@/context/chatContext';
 
-const ChatContext = createContext<{
-    notebookId: string;
-    chatId: string;
-} | null>(null);
-
-export const useChatContext = () => {
-    const context = useContext(ChatContext);
-    if (!context) {
-        throw new Error('useChatContext must be used within a ChatContext.Provider');
-    }
-    return context;
-};
-
-export default function chatPage({
+export default async function ChatPage({
     params 
 }: {
     params: Promise<{notebookId: string, chatId: string}>
 }) {
-    const unwrappedParams = React.use(params);
-    const { notebookId, chatId } = unwrappedParams;
-    const router = useRouter();
+    const { notebookId, chatId } = await params;
 
     return(
         <ChatContext.Provider value={{
