@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS documents (
 
 -- table to store arxiv document metadata
 CREATE TABLE IF NOT EXISTS arxiv_documents (
-    arxiv_id VARCHAR(30) PRIMARY KEY DEFAULT,
+    arxiv_id VARCHAR(30) PRIMARY KEY,
     summary TEXT NOT NULL,
     name VARCHAR(100) NOT NULL
 );
