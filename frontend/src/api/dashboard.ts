@@ -17,7 +17,7 @@ export const loadNotebookList = async (
     try {
         const accessToken = getAccessToken();
 
-        const response = await fetch('http://localhost:8000/dashboard/notebooks', {
+        const response = await fetch(`${process.env.FASTAPI_URL}/dashboard/notebooks`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,

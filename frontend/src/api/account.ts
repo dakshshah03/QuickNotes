@@ -23,7 +23,7 @@ export const createUser = async (
     try {
         setIsLoading(true);
         
-        const response = await fetch('http://localhost:8000/user/create', { 
+        const response = await fetch(`${process.env.FASTAPI_URL}/user/create`, { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
