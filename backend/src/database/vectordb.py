@@ -2,7 +2,8 @@ from llama_index.core import VectorStoreIndex, Document
 from llama_index.core.schema import TextNode
 from llama_index.core.settings import Settings
 from llama_index.core.storage.storage_context import StorageContext
-from llama_index.embeddings.gemini import GeminiEmbedding
+from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
+from google.genai.types import EmbedContentConfig
 from llama_index.vector_stores.postgres import PGVectorStore
 from llama_index.core.schema import BaseNode
 
@@ -21,11 +22,11 @@ class VectorDB:
         DB_NAME: str = config.Settings.db_name,
         DB_PORT: str = config.Settings.db_port
     ):
-        self.doc_embed_model = Settings.embed_model = GeminiEmbedding(
+        self.doc_embed_model = Settings.embed_model = GoogleGenAIEmbedding(
             model_name="models/gemini-embedding-001",
             task_type="RETRIEVAL_DOCUMENT",
-            dimensionality=768,
-            title="document_embedding"
+            title="document_embedding",
+            embedding_config=EmbedContentConfig(output_dimensionality=768)
         )
         Settings.llm = None
         
@@ -41,11 +42,11 @@ class VectorDB:
         )
         self.doc_index: VectorStoreIndex = VectorStoreIndex.from_vector_store(vector_store=self.doc_vector_store)
         
-        self.query_embed_model = GeminiEmbedding(
+        self.query_embed_model = GoogleGenAIEmbedding(
             model_name="models/gemini-embedding-001",
             task_type="QUESTION_ANSWERING",
-            dimensionality=768,
-            title="query_embedding"
+            title="query_embedding",
+            embedding_config=EmbedContentConfig(output_dimensionality=768)
         )
         
         

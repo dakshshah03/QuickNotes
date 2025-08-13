@@ -25,7 +25,7 @@ export const login = async (
         formData.append('username', username);
         formData.append('password', password);
 
-        const response = await fetch(`/api/auth/token`, { 
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/token`, { 
             method: 'POST',
             body: formData,
         });

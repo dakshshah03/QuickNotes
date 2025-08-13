@@ -17,7 +17,7 @@ export const loadNotebookList = async (
     try {
         const accessToken = getAccessToken();
 
-        const response = await fetch(`/api/dashboard/notebooks`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/dashboard/notebooks`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,

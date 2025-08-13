@@ -40,7 +40,7 @@ export const sendMessage = async (
     formData.append("activeDocuments", JSON.stringify(Array.from(activeDocuments)));
 
     try {
-        const response = await fetch(`/api/chat/messages/send`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/chat/messages/send`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${accessToken}`
@@ -80,7 +80,7 @@ export const loadMessageHistory = async (
 ) => {
     try {
         const accessToken = getAccessToken();
-        const response = await fetch(`/api/chat/messages/history/${notebookId}/${chatId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/chat/messages/history/${notebookId}/${chatId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -119,7 +119,7 @@ export const createChat = async (
         formData.append("chat_name", chatName);
         formData.append("notebook_id", notebookId);
         
-        const response = await fetch(`/api/chat/create`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/chat/create`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${accessToken}`

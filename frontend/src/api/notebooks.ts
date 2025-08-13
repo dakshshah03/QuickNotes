@@ -35,7 +35,7 @@ export const createNotebook = async (
         const formData = new FormData();
         formData.append('notebook_name', notebookName);
         
-        const response = await fetch(`/api/notebook/create`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/notebook/create`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${accessToken}`
@@ -73,7 +73,7 @@ export const loadSidebar = async (
     try {
         const accessToken = getAccessToken();
 
-        const response = await fetch(`/api/notebook/load/${notebookId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/notebook/load/${notebookId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
