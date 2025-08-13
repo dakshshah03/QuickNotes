@@ -31,28 +31,26 @@ def retrieve_context(
     document_list = None
     
     try:
-        
         document_ids = list(active_documents)
         print(f"Filtering by document IDs: {document_ids}")
         
         metadata_filter = MetadataFilters(
             filters=[
                 MetadataFilter(
-                    key="document_id",
+                    key="doc_id",
                     value=document_ids,
                     operator=FilterOperator.IN
                 )
             ]
         )
-        
+
         results = vector_db_instance.retrieve_documents(
             query_text=query,
-            top_k=5,
+            top_k=2,
             metadata_filter=metadata_filter
         )
         
-        print(f"Retrieved {len(results)} documents")
-
+        print(f"Retrieved {len(results)} documents with filter")
         document_list = [doc.text for doc in results]
         
     except Exception as e:

@@ -56,7 +56,8 @@ def chunk_document(
     
     doc = Document(
         text=parsed_text,
-        metadata={}
+        metadata={},
+        id_=str(metadata.document_id) 
     )
     
     nodes = node_parser.get_nodes_from_documents([doc])

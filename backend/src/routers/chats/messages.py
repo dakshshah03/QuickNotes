@@ -98,10 +98,10 @@ async def send_message(
         
         new_message = create_message(conn, message)
         prompt_context = retrieve_context(conn=conn, query=userPrompt, active_documents=active_documents_set)
-        print(prompt_context)
+        # print(prompt_context)
         
         prompt = construct_prompt(prompt_context, userPrompt)
-        print(prompt)
+        # print(prompt)
         
         llm_response = query_llm(prompt)
         new_message.llm_response = llm_response

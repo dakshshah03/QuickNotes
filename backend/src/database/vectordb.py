@@ -39,7 +39,13 @@ class VectorDB:
             password=DB_PASSWORD,
             table_name="document_embeddings",
             embed_dim=768,
-            use_jsonb=True
+            use_jsonb=True,
+            hnsw_kwargs={
+                "hnsw_m": 16,
+                "hnsw_ef_construction": 64,
+                "hnsw_ef_search": 40,
+                "hnsw_dist_method": "vector_cosine_ops",
+            },
         )
         
         self.doc_index: VectorStoreIndex = VectorStoreIndex.from_vector_store(vector_store=self.doc_vector_store)

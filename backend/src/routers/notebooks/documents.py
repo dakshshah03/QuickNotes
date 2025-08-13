@@ -54,8 +54,3 @@ async def upload_pdf(
             status_code=500,
             detail=f"Error saving PDF: {str(e)}"
         )
-    
-
-# TODO: make endpoint to return list of pdf names
-# TODO: make endpoint to enable/disable pdf for queries
-# TODO: make endpoint to return a pdf
