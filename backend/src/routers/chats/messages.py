@@ -68,7 +68,6 @@ async def send_message(
     try:
         payload = verifyJWT(token)
         user_id = UUID(payload.get("user_id"))
-        
         active_documents_set = set(json.loads(activeDocuments))
         
         # Validate input
@@ -99,8 +98,10 @@ async def send_message(
         
         new_message = create_message(conn, message)
         prompt_context = retrieve_context(conn=conn, query=userPrompt, active_documents=active_documents_set)
+        print(prompt_context)
         
         prompt = construct_prompt(prompt_context, userPrompt)
+        print(prompt)
         
         llm_response = query_llm(prompt)
         new_message.llm_response = llm_response

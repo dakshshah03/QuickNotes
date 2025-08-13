@@ -37,6 +37,7 @@ export const sendMessage = async (
     formData.append("notebookId", messageMetadata.notebook_id);
     formData.append("chatId", messageMetadata.chat_id);
     formData.append("userPrompt", messageMetadata.user_prompt);
+    console.log(activeDocuments);
     formData.append("activeDocuments", JSON.stringify(Array.from(activeDocuments)));
 
     try {

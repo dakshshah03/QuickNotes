@@ -40,6 +40,7 @@ def save_pdf(conn: Connection, file: UploadFile, notebook_id: UUID, save_dir: st
             document_id=new_document.id
         ) 
         
+        print(doc_metadata)
         chunked_document: List[BaseNode] = chunk_document(parsed_text=parsed_text, metadata=doc_metadata)
         vector_db_instance.store_document(chunked_pdf=chunked_document)
         

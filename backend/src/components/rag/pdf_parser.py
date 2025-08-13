@@ -64,7 +64,12 @@ def chunk_document(
         chunk_metadata = metadata.model_copy()
         chunk_metadata.chunk_index = str(chunk_index)
         
-        node.metadata = chunk_metadata.model_dump()
+        metadata_dict = chunk_metadata.model_dump()
+        for key, value in metadata_dict.items():
+            if hasattr(value, '__str__') and not isinstance(value, str):
+                metadata_dict[key] = str(value)
+        
+        node.metadata = metadata_dict
         chunks.append(node)
         
     return chunks

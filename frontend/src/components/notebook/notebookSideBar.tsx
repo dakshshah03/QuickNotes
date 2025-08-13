@@ -31,8 +31,8 @@ const NotebookSidebar = () => {
         setIsLoading,
         activeDocuments,
         setActiveDocIds,
-        chats, // moved from local state
-        setChats // moved from local state
+        chats,
+        setChats
     } = useNotebookContext();
     
     const [documents, setDocuments] = useState<documentItem[]>([]);
@@ -42,7 +42,7 @@ const NotebookSidebar = () => {
         await loadSidebar(
             router,
             notebookId,
-            setChats, // now using context
+            setChats,
             setDocuments,
             setIsLoading,
             setMessage
@@ -57,7 +57,8 @@ const NotebookSidebar = () => {
     }, [documents]);
 
     const updateDocumentStatus = (doc_id: string) => {
-        const updatedSet = new Set(activeDocuments);
+        const updatedSet = new Set(Array.from(activeDocuments));
+        
         if (updatedSet.has(doc_id)) {
             updatedSet.delete(doc_id);
         } else {

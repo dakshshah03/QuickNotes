@@ -2,7 +2,7 @@ from openai import OpenAI
 from typing import List, Dict
 from core.external_connections import LLM
 
-def construct_prompt(context: List[str],user_prompt: str):
+def construct_prompt(context: List[str], user_prompt: str):
     input_prompt = {
         "id": LLM.openai_prompt,
         "version": "4",

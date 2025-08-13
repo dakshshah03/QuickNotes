@@ -12,11 +12,10 @@ from pydantic import BaseModel
 from database.vectordb import vector_db_instance
 from llama_index.core.vector_stores import MetadataFilter, MetadataFilters, FilterOperator
 
-
 def retrieve_context(
         conn: Connection,
         query: str,
-        active_documents: Set[UUID]
+        active_documents: Set[str]
     ) -> List[str]:
     """
     creates a list of strings as context
@@ -32,11 +31,15 @@ def retrieve_context(
     document_list = None
     
     try:
+        
+        document_ids = list(active_documents)
+        print(f"Filtering by document IDs: {document_ids}")
+        
         metadata_filter = MetadataFilters(
             filters=[
                 MetadataFilter(
                     key="document_id",
-                    value=[str(doc_id) for doc_id in active_documents],
+                    value=document_ids,
                     operator=FilterOperator.IN
                 )
             ]
@@ -44,13 +47,16 @@ def retrieve_context(
         
         results = vector_db_instance.retrieve_documents(
             query_text=query,
-            top_k=2,
+            top_k=5,
             metadata_filter=metadata_filter
         )
         
+        print(f"Retrieved {len(results)} documents")
+
         document_list = [doc.text for doc in results]
         
     except Exception as e:
+        print(f"Error retrieving documents: {e}") 
         raise HTTPException(
             status_code=500,
             detail=f"Could not retrieve documents: {e}"

@@ -11,7 +11,7 @@ from core import config
 from typing import List, Optional, Dict
 from pydantic import BaseModel
 from uuid import UUID
-import psycopg2
+import psycopg
 
 class VectorDB:
     def __init__(
@@ -38,8 +38,10 @@ class VectorDB:
             user=DB_USERNAME,
             password=DB_PASSWORD,
             table_name="document_embeddings",
-            embed_dim=768 
+            embed_dim=768,
+            use_jsonb=True
         )
+        
         self.doc_index: VectorStoreIndex = VectorStoreIndex.from_vector_store(vector_store=self.doc_vector_store)
         
         self.query_embed_model = GoogleGenAIEmbedding(
@@ -60,7 +62,7 @@ class VectorDB:
         except Exception as e:
             print(f"Error storing document chunks: {e}")
             raise
-        
+
     def retrieve_documents(self, query_text: str, top_k: int = 2, metadata_filter: Optional[Dict] = None) -> List[Document]:
         try:
             Settings.embed_model = self.query_embed_model
