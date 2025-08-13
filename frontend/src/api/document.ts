@@ -27,10 +27,18 @@ export const uploadPDF = async (
             return;
         }
 
-        // TODO: handle errors
+        if (!response.ok) {
+            console.error('Error uploading file:', response.status);
+            throw new Error(`Failed to upload file: ${response.status}`);
+        }
 
-        const data: documentItem = await response.json();
-        setDocuments([data, ...documents]);
+        try {
+            const data: documentItem = await response.json();
+            setDocuments([data, ...documents]);
+        } catch (jsonError) {
+            console.error('Error parsing JSON response:', jsonError);
+            throw new Error('Invalid JSON response from server');
+        }
     } catch (error) {
         console.error('Error uploading file:', error);
         throw error;
