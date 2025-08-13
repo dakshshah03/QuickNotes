@@ -86,6 +86,11 @@ export const loadSidebar = async (
             return;
         }
 
+        if (response.status === 403) {
+            setMessage("You are not the owner of this notebook")
+            router.push('/dashboard/');
+        }
+
         if (!response.ok) {
             throw new Error(`HTTP error: ${response.status}`);
         }

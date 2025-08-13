@@ -5,12 +5,12 @@ import { WriteMessage } from '@/components/chat/messageBox';
 import { ChatWindow } from '@/components/chat/chatWindow';
 import { ChatContext } from '@/context/chatContext';
 
-export default async function ChatPage({
+export default function ChatPage({
     params 
 }: {
     params: Promise<{notebookId: string, chatId: string}>
 }) {
-    const { notebookId, chatId } = await params;
+    const { notebookId, chatId } = React.use(params);
 
     return(
         <ChatContext.Provider value={{

@@ -132,7 +132,7 @@ def fetch_owner(conn: psycopg.Connection, notebook_id: UUID) -> UUID:
         if row:
             notebook_owner = row[0]
         else:
-            raise NotebookNotFoundError(f"No notebook found with id {notebook_id}")
+            return None
         
     except psycopg.Error as e:
         print(f"Database error retrieving notebook with ID {notebook_id}: {e}")
