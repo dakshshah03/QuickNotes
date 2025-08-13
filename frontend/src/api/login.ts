@@ -25,7 +25,7 @@ export const login = async (
         formData.append('username', username);
         formData.append('password', password);
 
-        const response = await fetch(`${process.env.FASTAPI_URL}/auth/token`, { 
+        const response = await fetch(`http://localhost:8000/auth/token`, { 
             method: 'POST',
             body: formData,
         });
